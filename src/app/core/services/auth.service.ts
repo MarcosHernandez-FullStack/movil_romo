@@ -69,15 +69,15 @@ export class AuthService {
     const ses: Session = {
       token: res.token,
       user: {
-        id: res.user.idUsuario,
-        role: res.user.Rol,
-        username: res.user.usuario,
-        firstName: res.user.nombres,
-        lastName: res.user.apellidos,
-        email: res.user.email,
-        phone: res.user.telefono,
-        roleId: res.user.idRolUsuario,
-        idOperador: res.user.IdOperador ?? null,
+        id: res.id,
+        role: res.rol,
+        username: res.alias,
+        firstName: res.nombres,
+        lastName: res.apellidos,
+        email: res.correo,
+        phone: res.telefono ?? null,
+        roleId: res.idCliente ?? 0,
+        idOperador: res.idOperador ?? null,
       },
     };
     this._session.set(ses);

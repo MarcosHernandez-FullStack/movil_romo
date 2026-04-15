@@ -9,25 +9,25 @@ import { environment } from '../../../environments/environment';
 type ServiceEstado = ServiceApiModel['estado'];
 
 interface ReservaApi {
-  Id:               number;
-  DireccionOrigen:  string;
-  CoordLatOrigen:   string;
-  CoordLonOrigen:   string;
-  DireccionDestino: string;
-  CoordLatDestino:  string;
-  CoordLonDestino:  string;
-  CantidadCarga:    number;
-  FechaServicio:    string;
-  HoraInicio:       string;
-  HoraFin:          string;
-  DistanciaKm:      number;
-  TiempoEstimado:   number;
-  EstadoOperacion:  string;
-  NombreCliente:    string | null;
-  PlacaVehiculo:    string | null;
-  MarcaVehiculo:    string | null;
-  ModeloVehiculo:   string | null;
-  NotasAdicionales: string | null;
+  id:               number;
+  direccionOrigen:  string;
+  coordLatOrigen:   string;
+  coordLonOrigen:   string;
+  direccionDestino: string;
+  coordLatDestino:  string;
+  coordLonDestino:  string;
+  cantidadCarga:    number;
+  fechaServicio:    string;
+  horaInicio:       string;
+  horaFin:          string;
+  distanciaKm:      number;
+  tiempoEstimado:   number;
+  estadoOperacion:  string;
+  nombreCliente:    string | null;
+  placaVehiculo:    string | null;
+  marcaVehiculo:    string | null;
+  modeloVehiculo:   string | null;
+  notasAdicionales: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -109,40 +109,40 @@ export class ServicesService {
   }
 
   private mapToModel(r: ReservaApi): ServiceApiModel {
-    const fecha = new Date(r.FechaServicio);
+    const fecha = new Date(r.fechaServicio);
     const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
     const fechaLabel = `${fecha.getDate()} ${meses[fecha.getMonth()]}`;
 
-    const horaInicio = r.HoraInicio?.substring(0, 5) ?? '';
-    const horaFinal  = r.HoraFin?.substring(0, 5) ?? '';
+    const horaInicio = r.horaInicio?.substring(0, 5) ?? '';
+    const horaFinal  = r.horaFin?.substring(0, 5) ?? '';
 
-    const estado = this.mapEstado(r.EstadoOperacion);
+    const estado = this.mapEstado(r.estadoOperacion);
 
-    const vehiculos = r.PlacaVehiculo
-      ? [{ placa: r.PlacaVehiculo, marca: r.MarcaVehiculo ?? '', modelo: r.ModeloVehiculo ?? '' }]
+    const vehiculos = r.placaVehiculo
+      ? [{ placa: r.placaVehiculo, marca: r.marcaVehiculo ?? '', modelo: r.modeloVehiculo ?? '' }]
       : [];
 
     return {
-      idServicio:       r.Id,
-      codeLabel:        `SRV-${String(r.Id).padStart(3, '0')}`,
-      nombreCliente:    r.NombreCliente ?? '',
+      idServicio:        r.id,
+      codeLabel:         `SRV-${String(r.id).padStart(3, '0')}`,
+      nombreCliente:     r.nombreCliente ?? '',
       horaInicio,
       horaFinal,
-      fecha:            fechaLabel,
-      origenDireccion:  r.DireccionOrigen,
-      coordLatOrigen:   r.CoordLatOrigen,
-      coordLonOrigen:   r.CoordLonOrigen,
-      destinoDireccion: r.DireccionDestino,
-      coordLatDestino:  r.CoordLatDestino,
-      coordLonDestino:  r.CoordLonDestino,
-      distanciaKm:      r.DistanciaKm,
-      tiempoEstimadoMin: r.TiempoEstimado,
-      esLargaDistancia: false,
+      fecha:             fechaLabel,
+      origenDireccion:   r.direccionOrigen,
+      coordLatOrigen:    r.coordLatOrigen,
+      coordLonOrigen:    r.coordLonOrigen,
+      destinoDireccion:  r.direccionDestino,
+      coordLatDestino:   r.coordLatDestino,
+      coordLonDestino:   r.coordLonDestino,
+      distanciaKm:       r.distanciaKm,
+      tiempoEstimadoMin: r.tiempoEstimado,
+      esLargaDistancia:  false,
       estado,
-      cantidadVehiculos: r.CantidadCarga,
+      cantidadVehiculos: r.cantidadCarga,
       vehiculos,
-      notas:            r.NotasAdicionales ?? '',
-      hasArrived:       false,
+      notas:             r.notasAdicionales ?? '',
+      hasArrived:        false,
     };
   }
 

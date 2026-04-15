@@ -1,20 +1,18 @@
-export interface ApiUser {
-  idUsuario: number;
-  Rol: string;
-  usuario: string;
+export interface LoginResponse {
+  token: string;
+  expiresAt: string;
+  id: number;
+  alias: string;
   nombres: string;
   apellidos: string;
-  email: string;
-  telefono: number;
-  idRolUsuario: number;
-  IdOperador?: number | null;
-}
-
-export interface LoginResponse {
-  user_id: number;
-  status: number;
-  token: string;
-  user: ApiUser;
+  correo: string;
+  telefono?: string | null;
+  rol: string;
+  idCliente?: number | null;
+  idOperador?: number | null;
+  tarifaKm?: number | null;
+  tarifaBase?: number | null;
+  empresa?: string | null;
 }
 export interface SessionUser {
   id: number;
@@ -23,7 +21,7 @@ export interface SessionUser {
   firstName: string;
   lastName: string;
   email: string;
-  phone: number;
+  phone: string | null;
   roleId: number;
   roles?: string[];
   idOperador?: number | null;
