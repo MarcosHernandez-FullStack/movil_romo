@@ -1,29 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-
-interface UserProfile {
-  nombre: string;
-  id: string;
-  alias: string;
-  telefono: string;
-  serviciosCompletados: number;
-  kilometrosTotales: number;
-}
-
-interface VehiculoAsignado {
-  placa: string;
-  modelo: string;
-  marca: string;
-  ano: number;
-}
-
-interface LicenciaConducir {
-  numero: string;
-  categoria: string;
-  vencimiento: string;
-}
 
 @Component({
   selector: 'app-profile-mobile',
@@ -32,38 +9,39 @@ interface LicenciaConducir {
   templateUrl: './profile-mobile.component.html',
   styleUrls: ['./profile-mobile.component.scss'],
 })
-export class ProfileMobileComponent implements OnInit {
+export class ProfileMobileComponent {
   private auth = inject(AuthService);
-  private router = inject(Router);
 
-  userProfile: UserProfile = {
-    nombre: 'Juan Carlos Pérez',
-    id: 'OP001',
-    alias: 'JCARLOS',
-    telefono: '+51 987 654 321',
-    serviciosCompletados: 0,
-    kilometrosTotales: 0,
-  };
+  get user() {
+    return this.auth.user;
+  }
 
-  vehiculo: VehiculoAsignado = {
-    placa: 'ABC-123',
-    modelo: 'Hiace',
-    marca: 'Toyota',
-    ano: 2022,
-  };
+  get nombreCompleto(): string {
+    const u = this.user;
+    if (!u) return '';
+    return `${u.firstName} ${u.lastName}`.trim();
+  }
 
-  licencia: LicenciaConducir = {
-    numero: 'Q87654321',
-    categoria: 'A-IIb',
-    vencimiento: '14/08/2027',
-  };
+  get idLabel(): string {
+    const u = this.user;
+    if (!u) return '';
+    return u.idOperador ? `OP-${String(u.idOperador).padStart(3, '0')}` : String(u.id);
+  }
 
-  ngOnInit(): void {
+  get fecVenLicFormateada(): string {
+    const raw = this.user?.fecVenLic;
+    if (!raw) return '—';
+    const [year, month, day] = raw.split('-');
+    return `${day}/${month}/${year}`;
+  }
+
+  get isLicenciaVigente(): boolean {
+    const raw = this.user?.fecVenLic;
+    if (!raw) return false;
+    return new Date(raw) >= new Date(new Date().toDateString());
   }
 
   cerrarSesion(): void {
     this.auth.logout();
-    this.router.navigate(['/login']);
   }
-
 }

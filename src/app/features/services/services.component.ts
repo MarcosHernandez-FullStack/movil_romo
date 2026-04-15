@@ -21,6 +21,7 @@ export class ServicesComponent implements OnInit {
   activeService?: ServiceApiModel;
 
   upcomingServices: ServiceApiModel[] = [];
+  completedServices: ServiceApiModel[] = [];
   visibleServices: ServiceApiModel[] = [];
 
   isLoading = true;
@@ -67,7 +68,8 @@ export class ServicesComponent implements OnInit {
 
         this.activeService = this.services.find((s) => s.estado === 'en-progreso');
 
-        this.upcomingServices = this.services.filter((s) => s.estado == 'pendiente');
+        this.upcomingServices  = this.services.filter((s) => s.estado === 'pendiente');
+        this.completedServices = this.services.filter((s) => s.estado === 'completado');
 
         // this.currentPage = Math.min(this.currentPage, this.totalPages);
         // this.currentPage = Math.max(this.currentPage, 1);

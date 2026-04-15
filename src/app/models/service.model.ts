@@ -25,9 +25,10 @@ export interface ServiceApiModel {
 }
 
 export interface VehiculoTrasladoModel {
-  placa: string;
-  marca: string;
-  modelo: string;
+  placa:       string | null;
+  modelo:      string | null;
+  tipo:        string | null;
+  observacion: string | null;
 }
 
 // Modelo de vista para la UI

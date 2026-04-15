@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-import { ServicesService } from '../../core/services/services.service';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ServicesService, OperacionResult } from '../../core/services/services.service';
 import { ServiceApiModel } from '../../models/service.model';
 import { HeaderComponent } from "../../shared/header/header.component";
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,7 @@ export class ServiceDetailComponent implements OnDestroy {
   private location = inject(Location);
   private route = inject(ActivatedRoute);
   private servicesService = inject(ServicesService);
-  private router = inject(Router);
+
 
   service?: ServiceApiModel;
 
@@ -43,6 +43,11 @@ export class ServiceDetailComponent implements OnDestroy {
   finishCheckError?: string;
   isFarModalOpen = false;
   distanceToDestMeters?: number;
+
+  isResultModalOpen = false;
+  resultSuccess = false;
+  resultMessage = '';
+  isStarting = false;
 
   private onVisibilityChange = () => {
     if (document.visibilityState === 'visible') {
@@ -153,12 +158,38 @@ export class ServiceDetailComponent implements OnDestroy {
   }
 
   startServiceOnly(): void {
-    if (!this.service) return;
+    if (!this.service || this.isStarting) return;
 
-    if (this.service.estado === 'pendiente') {
-      this.servicesService.startService(this.service.idServicio);
-      this.startArriveSimulation(3000);
-    }
+    this.isStarting = true;
+
+    this.servicesService.iniciarServicioApi(this.service.idServicio).subscribe({
+      next: (res: OperacionResult) => {
+        this.isStarting = false;
+        if (res.exitoso === 1) {
+          this.servicesService.startService(this.service!.idServicio);
+          this.openResultModal(true, res.mensaje);
+        } else {
+          this.openResultModal(false, res.mensaje);
+        }
+      },
+      error: (err) => {
+        this.isStarting = false;
+        const msg = err?.error?.mensaje || 'Ocurrió un error al iniciar el servicio';
+        this.openResultModal(false, msg);
+      },
+    });
+  }
+
+  openResultModal(success: boolean, message: string): void {
+    this.resultSuccess = success;
+    this.resultMessage = message;
+    this.isResultModalOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeResultModal(): void {
+    this.isResultModalOpen = false;
+    document.body.style.overflow = '';
   }
 
   goToOrigin(): void{
@@ -225,8 +256,8 @@ export class ServiceDetailComponent implements OnDestroy {
     try {
     const coords = await this.getCurrentPosition();
 
-    const destLat = -11.9766166;
-    const destLng = -77.0600564;
+    const destLat = parseFloat(this.service?.coordLatDestino ?? '0');
+    const destLng = parseFloat(this.service?.coordLonDestino ?? '0');
 
     const distance = this.calculateDistanceMeters(
       destLat,
@@ -325,12 +356,30 @@ export class ServiceDetailComponent implements OnDestroy {
     document.body.style.overflow = '';
   }
 
-  confirmFinish(): void {
-    if (!this.service) return;
-    if (!this.finishConfirmed) return;
+  isFinishing = false;
 
-    this.closeFinishModal();
-    this.servicesService.finishService(this.service.idServicio);
-    this.router.navigate(['/mobile/services', this.service.idServicio, 'finished']);
+  confirmFinish(): void {
+    if (!this.service || !this.finishConfirmed || this.isFinishing) return;
+
+    this.isFinishing = true;
+
+    this.servicesService.finalizarServicioApi(this.service.idServicio).subscribe({
+      next: (res: OperacionResult) => {
+        this.isFinishing = false;
+        this.closeFinishModal();
+        if (res.exitoso === 1) {
+          this.servicesService.finishService(this.service!.idServicio);
+          this.openResultModal(true, res.mensaje);
+        } else {
+          this.openResultModal(false, res.mensaje);
+        }
+      },
+      error: (err) => {
+        this.isFinishing = false;
+        this.closeFinishModal();
+        const msg = err?.error?.mensaje || 'Ocurrió un error al finalizar el servicio';
+        this.openResultModal(false, msg);
+      },
+    });
   }
 }

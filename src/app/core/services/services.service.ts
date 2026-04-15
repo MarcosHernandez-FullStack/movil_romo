@@ -2,11 +2,23 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+
+export interface OperacionResult {
+  exitoso: number;
+  mensaje: string;
+}
 import { ServiceApiModel, UserInfoViewModel } from '../../models/service.model';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 
 type ServiceEstado = ServiceApiModel['estado'];
+
+interface VehiculoApiItem {
+  placa:       string | null;
+  modelo:      string | null;
+  tipo:        string | null;
+  observacion: string | null;
+}
 
 interface ReservaApi {
   id:               number;
@@ -24,10 +36,7 @@ interface ReservaApi {
   tiempoEstimado:   number;
   estadoOperacion:  string;
   nombreCliente:    string | null;
-  placaVehiculo:    string | null;
-  marcaVehiculo:    string | null;
-  modeloVehiculo:   string | null;
-  notasAdicionales: string | null;
+  vehiculos:        VehiculoApiItem[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -97,6 +106,14 @@ export class ServicesService {
     this.patchService(idServicio, { hasArrived: true });
   }
 
+  iniciarServicioApi(idServicio: number): Observable<OperacionResult> {
+    return this.http.patch<OperacionResult>(`${this.apiUrl}/iniciar`, { idReserva: idServicio });
+  }
+
+  finalizarServicioApi(idServicio: number): Observable<OperacionResult> {
+    return this.http.patch<OperacionResult>(`${this.apiUrl}/finalizar`, { idReserva: idServicio });
+  }
+
   finishService(idServicio: number): void {
     this.patchService(idServicio, { estado: 'completado', hasArrived: false });
   }
@@ -118,9 +135,12 @@ export class ServicesService {
 
     const estado = this.mapEstado(r.estadoOperacion);
 
-    const vehiculos = r.placaVehiculo
-      ? [{ placa: r.placaVehiculo, marca: r.marcaVehiculo ?? '', modelo: r.modeloVehiculo ?? '' }]
-      : [];
+    const vehiculos = (r.vehiculos ?? []).map(v => ({
+      placa:       v.placa,
+      modelo:      v.modelo,
+      tipo:        v.tipo,
+      observacion: v.observacion,
+    }));
 
     return {
       idServicio:        r.id,
@@ -141,7 +161,7 @@ export class ServicesService {
       estado,
       cantidadVehiculos: r.cantidadCarga,
       vehiculos,
-      notas:             r.notasAdicionales ?? '',
+      notas:             '',
       hasArrived:        false,
     };
   }

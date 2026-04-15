@@ -78,6 +78,9 @@ export class AuthService {
         phone: res.telefono ?? null,
         roleId: res.idCliente ?? 0,
         idOperador: res.idOperador ?? null,
+        nroLicencia: res.nroLicencia ?? null,
+        fecVenLic: res.fecVenLic ?? null,
+        serviciosCompletados: res.serviciosCompletados ?? null,
       },
     };
     this._session.set(ses);

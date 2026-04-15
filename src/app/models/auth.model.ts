@@ -13,6 +13,9 @@ export interface LoginResponse {
   tarifaKm?: number | null;
   tarifaBase?: number | null;
   empresa?: string | null;
+  nroLicencia?: string | null;
+  fecVenLic?: string | null;
+  serviciosCompletados?: number | null;
 }
 export interface SessionUser {
   id: number;
@@ -25,6 +28,9 @@ export interface SessionUser {
   roleId: number;
   roles?: string[];
   idOperador?: number | null;
+  nroLicencia?: string | null;
+  fecVenLic?: string | null;
+  serviciosCompletados?: number | null;
 }
 
 export interface Session {

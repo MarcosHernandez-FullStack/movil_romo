@@ -129,24 +129,33 @@
       </div>
 
       <div class="vehicle-list" *ngIf="service.vehiculos.length > 0; else noVehiculos">
-        <div class="vehicle-row" *ngFor="let v of service.vehiculos">
+        <div class="vehicle-row" *ngFor="let v of service.vehiculos; let i = index">
           <div class="vehicle-ico">
             <i class="bi bi-car-front"></i>
           </div>
 
           <div class="vehicle-body">
-            <span class="plate-pill">{{ v.placa }}</span>
-            <div class="vehicle-name">{{ v.marca }} · {{ v.modelo }}</div>
+            <div class="vehicle-top">
+              <span class="plate-pill">{{ v.placa ?? '—' }}</span>
+              <span class="tipo-badge" *ngIf="v.tipo">{{ v.tipo }}</span>
+            </div>
+            <div class="vehicle-model" *ngIf="v.modelo">{{ v.modelo }}</div>
+            <div class="vehicle-obs" *ngIf="v.observacion">
+              <i class="bi bi-chat-left-text"></i>{{ v.observacion }}
+            </div>
           </div>
         </div>
       </div>
 
       <ng-template #noVehiculos>
-        <div class="vehicle-empty">— Sin vehículos asignados —</div>
+        <div class="vehicle-empty">
+          <i class="bi bi-car-front"></i>
+          <span>Sin vehículos asignados</span>
+        </div>
       </ng-template>
     </section>
 
-    <section class="card">
+    <!-- <section class="card">
       <div class="section-head">
         <i class="bi bi-journal-text"></i>
         <span>NOTAS ADICIONALES</span>
@@ -155,7 +164,7 @@
       <div class="note-box">
         {{ service.notas}}
       </div>
-    </section>
+    </section> -->
 
     <!-- <div *ngIf="service.estado === 'en-progreso'" style="margin-bottom: 12px;">
 
@@ -191,9 +200,12 @@
     <footer class="bottom-cta" *ngIf="service">
       <div class="bottom-hint" *ngIf="service.estado === 'pendiente'">Selecciona app de navegación e inicia el servicio</div>
 
-      <button class="btn-main" (click)="startServiceOnly()" *ngIf="service.estado === 'pendiente'">
-        <i class="bi bi-play-fill"></i>
-        Iniciar Servicio
+      <button class="btn-main" (click)="startServiceOnly()"
+        *ngIf="service.estado === 'pendiente'"
+        [disabled]="isStarting">
+        <i class="bi bi-play-fill" *ngIf="!isStarting"></i>
+        <span class="btn-spinner" *ngIf="isStarting"></span>
+        {{ isStarting ? 'Iniciando...' : 'Iniciar Servicio' }}
       </button>
 
       <!-- <div class="bottom-hint-complete" *ngIf="service.hasArrived;">
@@ -205,10 +217,10 @@
         class="btn-main"
         (click)="openFinishModal()"
         *ngIf="service.estado === 'en-progreso'"
-        [disabled]="isCheckingFinish"
-        >
-        <i class="bi bi-check2-square"></i>
-       {{ isCheckingFinish ? 'Validando ubicación...' : 'Finalizar Servicio' }}
+        [disabled]="isCheckingFinish || isFinishing">
+        <span class="btn-spinner" *ngIf="isCheckingFinish || isFinishing"></span>
+        <i class="bi bi-check2-square" *ngIf="!isCheckingFinish && !isFinishing"></i>
+        {{ isFinishing ? 'Finalizando...' : isCheckingFinish ? 'Validando ubicación...' : 'Finalizar Servicio' }}
       </button>
     </footer>
   </main>
@@ -344,9 +356,10 @@
         </span>
       </label>
 
-      <button class="finish-btn" [disabled]="!finishConfirmed" (click)="confirmFinish()">
-        <i class="bi bi-shield-check"></i>
-        Confirmar Finalización
+      <button class="finish-btn" [disabled]="!finishConfirmed || isFinishing" (click)="confirmFinish()">
+        <span class="btn-spinner btn-spinner--dark" *ngIf="isFinishing"></span>
+        <i class="bi bi-shield-check" *ngIf="!isFinishing"></i>
+        {{ isFinishing ? 'Finalizando...' : 'Confirmar Finalización' }}
       </button>
 
     </div>
@@ -383,4 +396,27 @@
 
     </div>
   </div>
+
+  <!-- Modal resultado iniciar servicio -->
+  <div class="result-modal" *ngIf="isResultModalOpen" (click)="closeResultModal()">
+    <div class="result-sheet" (click)="$event.stopPropagation()">
+      <div class="result-grabber"></div>
+
+      <div class="result-ico" [class.result-ico--success]="resultSuccess" [class.result-ico--error]="!resultSuccess">
+        <i class="bi" [class.bi-check-lg]="resultSuccess" [class.bi-exclamation-triangle]="!resultSuccess"></i>
+      </div>
+
+      <div class="result-title" [class.result-title--success]="resultSuccess" [class.result-title--error]="!resultSuccess">
+        {{ resultSuccess ? '¡Servicio iniciado!' : 'No se pudo iniciar' }}
+      </div>
+
+      <div class="result-message">{{ resultMessage }}</div>
+
+      <button class="result-btn" [class.result-btn--success]="resultSuccess" [class.result-btn--error]="!resultSuccess"
+        (click)="closeResultModal()">
+        Entendido
+      </button>
+    </div>
+  </div>
+
 </div>
