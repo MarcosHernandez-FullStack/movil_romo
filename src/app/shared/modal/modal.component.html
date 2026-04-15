@@ -1,0 +1,27 @@
+@if (open) {
+<div class="modal__backdrop" (click)="onBackdrop($event)">
+  <div
+    class="modal__dialog"
+    [ngClass]="dialogClass"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <div class="modal__card">
+      @if (showDefaultHeader) {
+      <div class="modal__header">
+        <h5 id="modal-title" class="mb-0">{{ title }}</h5>
+        <button class="btn-close" aria-label="Cerrar" (click)="close()"></button>
+      </div>
+      }
+      <div class="modal__body">
+        <ng-content></ng-content>
+        <ng-content select="[ModalBody]"></ng-content>
+      </div>
+      <div class="modal__footer">
+        <ng-content select="[ModalFooter]"></ng-content>
+      </div>
+    </div>
+  </div>
+</div>
+}

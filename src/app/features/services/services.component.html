@@ -1,0 +1,67 @@
+<div class="services-page">
+  <app-header [userName]="userInfo.fullName" [servicesCount]="userInfo.assignedServicesCount"></app-header>
+
+  <main class="main-content">
+    <div class="services-section">
+
+      <div *ngIf="isLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Cargando servicios...</p>
+      </div>
+
+      <ng-container *ngIf="!isLoading && activeService as active">
+        <div class="active-label">
+          <span class="dot"></span>
+          <span>En Curso</span>
+        </div>
+
+        <div class="locked-hint">
+          <div class="locked-ico">
+            <i class="bi bi-lock" aria-hidden="true"></i>
+          </div>
+
+          <span class="locked-text">
+            Finaliza el servicio actual para habilitar los demás
+          </span>
+        </div>
+
+        <app-service-card [service]="active"></app-service-card>
+      </ng-container>
+
+      <div class="section-header">
+        <label class="date-picker-wrap" for="fecha-servicio">
+          <i class="bi bi-calendar3"></i>
+          <span class="date-label">{{ dateLabel }}</span>
+          <i class="bi bi-chevron-down date-chevron"></i>
+          <input
+            id="fecha-servicio"
+            type="date"
+            class="date-input-hidden"
+            [value]="selectedDate"
+            (change)="onDateChange($any($event.target).value)"
+          />
+        </label>
+      </div>
+
+      <!-- <div class="warning-banner" *ngIf="!isLoading && hasActiveService">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Finaliza el servicio en curso antes de iniciar otro
+      </div> -->
+
+      <div *ngIf="!isLoading && upcomingServices.length === 0" class="empty">
+        <p><i class="bi bi-inbox"></i> No hay servicios disponibles</p>
+      </div>
+
+      <div *ngIf="!isLoading && upcomingServices.length > 0" class="services-list">
+        <!-- visibleServices -->
+        <app-service-card
+          *ngFor="let service of upcomingServices"
+          [service]="service"
+          [isLocked]="!!activeService && service.estado !== 'en-progreso'"
+          >
+        </app-service-card>
+      </div>
+
+    </div>
+  </main>
+</div>

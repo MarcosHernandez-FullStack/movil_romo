@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FrontendNg20</string>
+    <string name="title_activity_main">FrontendNg20</string>
+    <string name="package_name">com.softbrilliance.frontendng20</string>
+    <string name="custom_url_scheme">com.softbrilliance.frontendng20</string>
+</resources>

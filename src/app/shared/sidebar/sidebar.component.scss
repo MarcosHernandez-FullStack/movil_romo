@@ -1,0 +1,155 @@
+:host {
+  display: block;
+}
+
+.sidebar {
+  width: 260px;
+  flex: 0 0 260px;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  z-index: 1031;
+  transition: transform 0.2s ease;
+  background: var(--sb-bg);
+  box-shadow: 1px 0 5px var(--sb-bg);
+  color: var(--sb-text);
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+}
+.logo-badge {
+  --badge-size: 34px;
+  --badge-shadow: var(--brand-glow-sm);
+  font-weight: 700;
+}
+.brand-name {
+  font-weight: 150;
+  color: var(--sb-text);
+  font-size: 18px;
+}
+
+/* Secciones */
+.nav-section {
+  padding: 0.7rem 1rem 0 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--sb-muted);
+  text-transform: uppercase;
+}
+
+.nav-scroll {
+  padding: 0.5rem 0.8rem;
+}
+/* Enlaces y botones del menú */
+.nav-link,
+.nav-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  color: var(--sb-text);
+  border-radius: 0.6rem;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.nav-link:hover,
+.nav-link-btn:hover {
+  background: var(--sb-bg-2);
+  color: var(--color-neutral-0);
+}
+.nav-link .bi,
+.nav-link-btn .bi {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+.flex-1 {
+  flex: 1 1 auto;
+}
+
+/* Activo (RouterLinkActive = 'active') */
+.nav-link.active {
+  background: color-mix(in oklab, var(--sb-active), transparent 82%);
+  color: var(--color-neutral-0);
+  position: relative;
+}
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--sb-active);
+}
+
+/* Submenú */
+.nav-children {
+  margin: 0 0.5rem 0.25rem 2.25rem;
+  border-left: 1px dashed rgba(var(--color-neutral-0-rgb), 0.08);
+}
+.nav-sublink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.6rem;
+  margin: 0.1rem 0 0.1rem 0.6rem;
+  border-radius: 0.5rem;
+  color: var(--sb-text);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+.nav-sublink:hover {
+  background: var(--sb-bg-2);
+  color: var(--color-neutral-0);
+}
+.nav-sublink.active {
+  background: color-mix(in oklab, var(--sb-active), transparent 82%);
+  color: var(--color-neutral-0);
+}
+
+/* Badge pequeño para menú */
+.menu-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.25rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  line-height: 1;
+  background: rgba(var(--color-neutral-0-rgb), 0.12);
+  color: var(--color-neutral-0);
+}
+.sidebar.open {
+  transform: translateX(0);
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-100%);
+  box-shadow: var(--overlay-shadow);
+}
+/* Responsive: off-canvas en móvil */
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--overlay-shadow);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}

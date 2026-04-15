@@ -1,0 +1,124 @@
+<div class="profile-page">
+  <!-- HEADER AZUL (recto) -->
+  <header class="profile-header">
+    <div class="kicker">PERFIL DEL OPERADOR</div>
+    <h1 class="name">{{ userProfile.nombre }}</h1>
+    <div class="id">ID: {{ userProfile.id }}</div>
+  </header>
+
+  <main class="content">
+    <!-- STATS -->
+    <section class="stats-card">
+      <div class="stats-icon">
+        <i class="bi bi-award" aria-hidden="true"></i>
+      </div>
+
+      <div class="stats-body">
+        <div class="stats-number">{{ userProfile.serviciosCompletados }}</div>
+        <div class="stats-label">Servicios Completados</div>
+      </div>
+    </section>
+
+    <!-- DATOS DEL OPERADOR -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-title">DATOS DEL OPERADOR</span>
+      </div>
+
+      <div class="list">
+        <div class="row">
+          <div class="row-ico neutral"><i class="bi bi-hash"></i></div>
+          <div class="row-label">ID</div>
+          <div class="row-value link">{{ userProfile.id }}</div>
+        </div>
+
+        <div class="row">
+          <div class="row-ico blue"><i class="bi bi-person"></i></div>
+          <div class="row-label">Alias</div>
+          <div class="row-value">{{ userProfile.alias }}</div>
+        </div>
+
+        <div class="row">
+          <div class="row-ico blue"><i class="bi bi-person-badge"></i></div>
+          <div class="row-label">Nombre completo</div>
+          <div class="row-value">{{ userProfile.nombre }}</div>
+        </div>
+
+        <div class="row">
+          <div class="row-ico green"><i class="bi bi-telephone"></i></div>
+          <div class="row-label">Teléfono</div>
+          <div class="row-value">{{ userProfile.telefono }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UNIDAD ASIGNADA -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-title">UNIDAD ASIGNADA</span>
+      </div>
+
+      <div class="list">
+        <div class="row">
+          <div class="row-ico blue"><i class="bi bi-credit-card-2-front"></i></div>
+          <div class="row-label">Placa</div>
+          <div class="row-value link">{{ vehiculo.placa }}</div>
+        </div>
+
+        <div class="row">
+          <div class="row-ico neutral"><i class="bi bi-car-front"></i></div>
+          <div class="row-label">Marca</div>
+          <div class="row-value">{{ vehiculo.marca }}</div>
+        </div>
+
+        <div class="row">
+          <div class="row-ico neutral"><i class="bi bi-wrench-adjustable"></i></div>
+          <div class="row-label">Modelo</div>
+          <div class="row-value">{{ vehiculo.modelo }}</div>
+        </div>
+
+        <div class="row">
+          <div class="row-ico neutral"><i class="bi bi-calendar3"></i></div>
+          <div class="row-label">Año</div>
+          <div class="row-value">{{ vehiculo.ano }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LICENCIA -->
+    <section class="card">
+      <div class="card-head head-row">
+        <span class="card-title">LICENCIA DE CONDUCIR</span>
+
+        <span class="chip ok">
+          <i class="bi bi-shield-check" aria-hidden="true"></i>
+          Vigente
+        </span>
+      </div>
+
+      <div class="list">
+        <div class="row">
+          <div class="row-ico blue"><i class="bi bi-credit-card-2-front"></i></div>
+          <div class="row-label">Número</div>
+          <div class="row-value link">{{ licencia.numero }}</div>
+        </div>
+
+        <div class="row">
+          <div class="row-ico neutral"><i class="bi bi-calendar-event"></i></div>
+          <div class="row-label">Vencimiento</div>
+          <div class="row-value">{{ licencia.vencimiento }}</div>
+        </div>
+      </div>
+    </section>
+
+    <button class="btn-logout" (click)="cerrarSesion()">
+      <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+      Cerrar Sesión
+    </button>
+
+    <footer class="footer">
+      <div class="footer-main">Sistema de Operador v2.0</div>
+      <div class="footer-sub">© 2026 · Todos los derechos reservados</div>
+    </footer>
+  </main>
+</div>

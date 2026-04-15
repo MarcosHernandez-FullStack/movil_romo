@@ -1,0 +1,192 @@
+<section class="dashboard">
+  <header class="dashboard__hero surface-card">
+    <div>
+      <p class="dashboard__date">{{ todayLabel }}</p>
+      <h1 class="dashboard__title">Hola, {{ user?.firstName || user?.username || 'Equipo' }}!</h1>
+      <p class="dashboard__subtitle">
+        Estas son las metricas mas relevantes del portal Softbrilliance para hoy.
+      </p>
+    </div>
+
+    <div class="dashboard__hero-meta">
+      <span class="dashboard__update">{{ lastUpdate() }}</span>
+      <button class="btn btn-outline-primary btn-sm" type="button" (click)="refreshData()">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Refrescar
+      </button>
+    </div>
+  </header>
+
+  <div class="row g-3">
+    @for (card of summaryCards; track card.label) {
+    <div class="col-12 col-sm-6 col-xl-3">
+      <article class="surface-card stat-card">
+        <header class="stat-card__header">
+          <span class="stat-card__label">{{ card.label }}</span>
+          <div
+            class="stat-card__delta"
+            [class.stat-card__delta--up]="card.trend === 'up'"
+            [class.stat-card__delta--down]="card.trend === 'down'"
+            [class.stat-card__delta--flat]="card.trend === 'flat'"
+          >
+            <i
+              class="bi me-1"
+              [class.bi-arrow-up-right]="card.trend === 'up'"
+              [class.bi-arrow-down-right]="card.trend === 'down'"
+              [class.bi-dash-lg]="card.trend === 'flat'"
+            ></i>
+            {{ card.delta }}
+          </div>
+        </header>
+        <strong class="stat-card__value">{{ card.value }}</strong>
+        <span class="stat-card__helper text-muted">{{ card.helper }}</span>
+      </article>
+    </div>
+    }
+  </div>
+
+  <div class="row g-3 align-items-stretch">
+    <div class="col-12 col-xl-7">
+      <article class="surface-card performance-card h-100">
+        <header class="performance-card__header">
+          <div>
+            <h2 class="performance-card__title">Productividad semanal</h2>
+            <p class="text-muted mb-0">Porcentaje de tickets resueltos vs objetivo del equipo</p>
+          </div>
+          <div class="performance-card__legend">
+            <span><span class="legend-dot legend-dot--current"></span>Real</span>
+            <span><span class="legend-dot legend-dot--target"></span>Objetivo</span>
+          </div>
+        </header>
+
+        <div class="performance-card__body">
+          <div class="chart-bars">
+            @for (point of performanceMock; track point.label) {
+            <div class="chart-bars__column">
+              <div class="chart-bars__bar-wrapper">
+                <div class="chart-bars__target" [style.height.%]="point.target"></div>
+                <div class="chart-bars__bar" [style.height.%]="point.value"></div>
+              </div>
+              <span class="chart-bars__label">{{ point.label }}</span>
+            </div>
+            }
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="col-12 col-xl-5">
+      <article class="surface-card quick-actions h-100">
+        <header class="quick-actions__header">
+          <h2 class="quick-actions__title">Acciones rapidas</h2>
+          <p class="text-muted mb-0">Atajos recomendados segun tus permisos</p>
+        </header>
+
+        <div class="quick-actions__list">
+          @for (action of quickActions; track action.label) {
+          <button type="button" class="quick-actions__item" (click)="handleAction(action)">
+            <div class="quick-actions__icon">
+              <i class="bi" [class]="action.icon"></i>
+            </div>
+            <div class="quick-actions__content">
+              <span class="quick-actions__label">{{ action.label }}</span>
+              <span class="quick-actions__description">{{ action.description }}</span>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </button>
+          }
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-4">
+      <article class="surface-card system-health">
+        <header class="system-health__header">
+          <h2 class="system-health__title">Salud del sistema</h2>
+          <p class="text-muted mb-0">Estado general de la plataforma</p>
+        </header>
+
+        <div class="system-health__stats">
+          <div class="system-health__stat">
+            <span class="system-health__label">Disponibilidad</span>
+            <strong class="system-health__value">{{ systemHealth.uptime }}</strong>
+          </div>
+          <div class="system-health__stat">
+            <span class="system-health__label">Tiempo respuesta</span>
+            <strong class="system-health__value">{{ systemHealth.responseTime }}</strong>
+          </div>
+          <div class="system-health__stat">
+            <span class="system-health__label">Incidencias activas</span>
+            <strong class="system-health__value">{{ systemHealth.incidents }}</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="surface-card timeline">
+        <header class="timeline__header">
+          <h2 class="timeline__title">Actividad destacada</h2>
+        </header>
+        <div class="timeline__list">
+          @for (item of recentActivity; track item.title) {
+          <div class="timeline__item">
+            <div class="timeline__bullet"></div>
+            <div class="timeline__content">
+              <span class="timeline__item-title">{{ item.title }}</span>
+              <span class="timeline__item-meta text-muted">{{ item.team }}</span>
+              <span class="timeline__item-tag">{{ item.status }}</span>
+            </div>
+            <span class="timeline__due text-muted">{{ item.due }}</span>
+          </div>
+          }
+        </div>
+      </article>
+    </div>
+
+    <div class="col-12 col-lg-8">
+      <article class="surface-card tickets h-100">
+        <header class="tickets__header">
+          <div>
+            <h2 class="tickets__title">Tickets prioritarios</h2>
+            <p class="text-muted mb-0">Seguimiento de solicitudes de alto impacto</p>
+          </div>
+          <button type="button" class="btn btn-light btn-sm">Ver todos</button>
+        </header>
+
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Asunto</th>
+                <th scope="col">Responsable</th>
+                <th scope="col">Prioridad</th>
+                <th scope="col" class="text-end">Actualizado</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ticket of serviceTickets; track ticket.id) {
+              <tr>
+                <td class="text-muted">{{ ticket.id }}</td>
+                <td>{{ ticket.subject }}</td>
+                <td>{{ ticket.owner }}</td>
+                <td>
+                  <span
+                    class="status-pill"
+                    [class.status-pill--high]="ticket.priority === 'Alta'"
+                    [class.status-pill--medium]="ticket.priority === 'Media'"
+                    [class.status-pill--low]="ticket.priority === 'Baja'"
+                    >{{ ticket.priority }}</span
+                  >
+                </td>
+                <td class="text-end text-muted">{{ ticket.updated }}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

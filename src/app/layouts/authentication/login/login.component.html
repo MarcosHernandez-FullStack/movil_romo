@@ -1,0 +1,62 @@
+<section class="auth-hero" data-bg="gradient">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+        <div class="auth-card card border-0 u-glass">
+          <div class="card-body p-4 p-md-5">
+            <div class="brand mb-4">
+              <div class="brand-icon u-badge u-badge--brand" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor" role="img">
+                  <path
+                    d="M3 3h6v6H3V3zm6 6h6v6H9V9zM3 15h6v6H3v-6zm12-12h6v6h-6V3zm0 12h6v6h-6v-6z"
+                  />
+                </svg>
+              </div>
+              <h1 class="h5 mb-1">Portal Softbrilliance</h1>
+              <p class="muted small mb-0">Inicia sesión para continuar</p>
+            </div>
+
+            <form class="pX-4" [formGroup]="form" (ngSubmit)="submit()">
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                  [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
+                />
+                <div class="invalid-feedback">Ingresa un email válido</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  [class.is-invalid]="
+                    form.controls.password.touched && form.controls.password.invalid
+                  "
+                />
+                <div class="invalid-feedback">Ingresa tu contraseña</div>
+              </div>
+
+              <div class="d-grid">
+                <button class="btn btn-primary" type="submit" [disabled]="loading || form.invalid">
+                  {{ loading ? 'Validando...' : 'Entrar' }}
+                </button>
+              </div>
+
+              <div class="divider text-center my-3">
+                <span>O continúa con</span>
+              </div>
+              <div class="social-login mb-3">
+                <div #googleBtn class="google-btn-slot"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

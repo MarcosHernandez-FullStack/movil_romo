@@ -1,0 +1,79 @@
+<app-modal [(open)]="open" [title]="title" size="lg" (openChange)="openChange.emit($event)">
+  <form [formGroup]="form" (ngSubmit)="submit()" modalBody kModalBody>
+    @if (loading) {
+    <div class="alert alert-info">Cargando…</div>
+    } @else {
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Nombre completo</label>
+        <input
+          class="form-control"
+          formControlName="fullName"
+          [class.is-invalid]="submitted && form.controls.fullName.invalid"
+        />
+        <div class="invalid-feedback">Mínimo 3 caracteres.</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          [class.is-invalid]="submitted && form.controls.email.invalid"
+        />
+        <div class="invalid-feedback">Email válido requerido.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Usuario</label>
+        <input
+          class="form-control"
+          formControlName="username"
+          [class.is-invalid]="submitted && form.controls.username.invalid"
+        />
+        <div class="invalid-feedback">Obligatorio.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Teléfono (9 dígitos)</label>
+        <input
+          class="form-control"
+          formControlName="phone"
+          inputmode="numeric"
+          pattern="\d*"
+          [class.is-invalid]="submitted && form.controls.phone.invalid"
+        />
+        <div class="invalid-feedback">Debe tener 9 dígitos.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Rol</label>
+        <select
+          class="form-select"
+          formControlName="roleId"
+          [class.is-invalid]="submitted && form.controls.roleId.invalid"
+        >
+          <option [ngValue]="null">Selecciona…</option>
+          @for (r of roles(); track r.idRolUsuario) {
+          <option [ngValue]="r.idRolUsuario">{{ r.rol }}</option>
+          }
+        </select>
+        <div class="invalid-feedback">Selecciona un rol válido (1–15).</div>
+      </div>
+    </div>
+
+    @if (error) {
+    <div class="text-danger small mt-3">{{ error }}</div>
+    } }
+  </form>
+
+  <div modalFooter ModalFooter class="d-flex gap-5">
+    <button class="btn btn-outline-secondary" (click)="close()" [disabled]="saving">
+      Cancelar
+    </button>
+    <button class="btn btn-primary" (click)="submit()" [disabled]="saving || form.invalid">
+      {{ saving ? 'Guardando…' : isEdit ? 'Actualizar' : 'Crear' }}
+    </button>
+  </div>
+</app-modal>

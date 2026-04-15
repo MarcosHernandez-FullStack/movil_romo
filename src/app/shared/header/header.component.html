@@ -1,0 +1,38 @@
+<header class="app-header" [ngClass]="variant">
+  <div class="header-content">
+
+    <ng-container *ngIf="variant === 'detail'; else normalTpl">
+      <div class="service-top">
+        <span class="service-label">SERVICIO</span>
+        <span class="service-code-pill">{{ serviceCode }}</span>
+      </div>
+
+      <div class="service-status-row" *ngIf="status">
+        <span class="service-status-pill" [ngClass]="status">
+          <ng-container *ngIf="status !== 'en-progreso'; else activeDot">
+            <i [class]="'bi ' + statusIconClass" aria-hidden="true"></i>
+          </ng-container>
+          <ng-template #activeDot>
+            <span class="status-dot"></span>
+          </ng-template>
+
+          {{ statusLabel }}
+        </span>
+      </div>
+    </ng-container>
+
+    <ng-template #normalTpl>
+      <ng-container *ngIf="title; else greetingTpl">
+        <h1 class="header-title">{{ title }}</h1>
+        <p class="header-subtitle">{{ subtitle }}</p>
+      </ng-container>
+
+      <ng-template #greetingTpl>
+        <p class="header-subtitle">Mis Servicios</p>
+        <h1 class="header-title">Hola, {{ userName }}</h1>
+        <p class="header-subtitle">{{ servicesCount }} servicios asignados</p>
+      </ng-template>
+    </ng-template>
+
+  </div>
+</header>

@@ -1,0 +1,316 @@
+@use 'bootstrap/scss/bootstrap';
+@use 'sass:meta';
+@use 'sass:color';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+$palette: (
+  neutral: (
+    0: #ffffff,
+    25: #f8fafc,
+    50: #f1f5f9,
+    100: #e2e8f0,
+    200: #cbd5e1,
+    300: #94a3b8,
+    400: #64748b,
+    500: #475569,
+    700: #334155,
+    900: #0f172a
+  ),
+  brand: (
+    400: #38bdf8,
+    500: #0ea5e9,
+    600: #0284c7,
+    700: #0369a1
+  ),
+  accent: (
+    400: #fb923c,
+    500: #f97316,
+    600: #ea580c
+  ),
+  success: (
+    100: #dcfce7,
+    500: #12b76a,
+    700: #166534
+  ),
+  warning: (
+    100: #fef3c7,
+    500: #facc15,
+    600: #eab308
+  ),
+  danger: (
+    100: #fee2e2,
+    500: #f87171,
+    700: #991b1b
+  )
+);
+
+html,
+body,
+app-root {
+  height: 100%;
+}
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans',
+    'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: 14px;
+}
+
+body td,
+body th {
+  font-family: Open Sans, sans-serif;
+}
+
+:root {
+  @each $family, $scale in $palette {
+    @if meta.type-of($scale) == 'map' {
+      @each $tone, $value in $scale {
+        --color-#{$family}-#{$tone}: #{$value};
+        --color-#{$family}-#{$tone}-rgb: #{color.channel($value, 'red', $space: rgb)},
+          #{color.channel($value, 'green', $space: rgb)}, #{color.channel($value, 'blue', $space: rgb)};
+      }
+    } @else {
+      --color-#{$family}: #{$scale};
+      --color-#{$family}-rgb: #{color.channel($scale, 'red', $space: rgb)},
+        #{color.channel($scale, 'green', $space: rgb)}, #{color.channel($scale, 'blue', $space: rgb)};
+    }
+  }
+
+  /* Paleta alias */
+  --brand: var(--color-brand-500);
+  --brand-600: var(--color-brand-600);
+  --brand-700: var(--color-brand-700);
+  --brand-rgb: var(--color-brand-500-rgb);
+  --brand-700-rgb: var(--color-brand-700-rgb);
+  --brand-gradient: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700));
+  --brand-glow-lg: 0 10px 26px rgba(var(--color-brand-500-rgb), 0.35);
+  --brand-glow-md: 0 8px 20px rgba(var(--color-brand-500-rgb), 0.35);
+  --brand-glow-sm: 0 6px 18px rgba(var(--color-brand-500-rgb), 0.35);
+  --accent: var(--color-accent-500);
+  --success: var(--color-success-500);
+  --warning: var(--color-warning-500);
+  --danger: var(--color-danger-500);
+
+  /* Superficies y texto */
+  --bg: var(--color-neutral-25);
+  --surface: var(--color-neutral-0);
+  --surface-alt: var(--color-neutral-50);
+  --text: var(--color-neutral-900);
+  --muted: var(--color-neutral-400);
+  --overlay-shadow: 0 20px 60px rgba(var(--color-neutral-900-rgb), 0.25);
+
+  /* Glass / blur */
+  --glass-bg: rgba(var(--color-neutral-0-rgb), 0.85);
+  --glass-border: rgba(var(--color-brand-500-rgb), 0.14);
+  --glass-shadow-lg: 0 22px 50px rgba(var(--color-brand-700-rgb), 0.15),
+    0 10px 20px rgba(var(--color-brand-700-rgb), 0.08);
+  --glass-shadow-md: 0 8px 20px rgba(var(--color-brand-600-rgb), 0.08);
+
+  /* Sidebar */
+  --sb-bg: color-mix(in oklab, var(--color-brand-700), black 10%);
+  --sb-bg-2: color-mix(in oklab, var(--color-brand-700), black 18%);
+  --sb-text: var(--color-neutral-25);
+  --sb-muted: color-mix(in oklab, var(--color-neutral-200), var(--color-neutral-400) 50%);
+  --sb-active: var(--color-brand-500);
+
+  --bs-table-bg: var(--surface);
+
+  /* Borde/Sombra/Focus */
+  --line: rgba(var(--color-neutral-900-rgb), 0.08);
+  --shadow: 0 10px 24px rgba(var(--color-neutral-900-rgb), 0.06);
+  --ring: 0 0 0 0.25rem rgba(var(--color-brand-500-rgb), 0.18);
+
+  /* ===== Mapeo Bootstrap (runtime) ===== */
+  --bs-primary: var(--color-brand-500);
+  --bs-primary-rgb: var(--color-brand-500-rgb);
+  --bs-secondary: var(--color-brand-700);
+  --bs-secondary-rgb: var(--color-brand-700-rgb);
+  --bs-success: var(--color-success-500);
+  --bs-success-rgb: var(--color-success-500-rgb);
+  --bs-warning: var(--color-warning-500);
+  --bs-warning-rgb: var(--color-warning-500-rgb);
+  --bs-danger: var(--color-danger-500);
+  --bs-danger-rgb: var(--color-danger-500-rgb);
+
+  --bs-body-bg: var(--bg);
+  --bs-body-color: var(--text);
+  --bs-border-color: var(--color-neutral-100);
+  --bs-link-color: var(--color-brand-500);
+  --bs-link-hover-color: color-mix(in oklab, var(--color-brand-500), black 10%);
+}
+
+/* Utilidades compartidas */
+.u-badge {
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  inline-size: var(--badge-size, auto);
+  block-size: var(--badge-size, auto);
+}
+
+.u-badge--brand {
+  background: var(--brand-gradient);
+  color: var(--color-neutral-0);
+  box-shadow: var(--badge-shadow, var(--brand-glow-md));
+}
+
+.u-glass {
+  backdrop-filter: blur(var(--glass-blur, 10px));
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--glass-radius, 1rem);
+  box-shadow: var(--glass-shadow, var(--shadow));
+}
+
+/* Dark mode opcional */
+:root[data-theme='dark'] {
+  --bs-link-hover-color: color-mix(in oklab, var(--color-brand-500), white 12%);
+}
+
+/* ===========================
+   LAYOUT ADMIN
+   =========================== */
+.admin-shell {
+  display: flex;
+  min-height: 100dvh;
+  width: 100%;
+  background: var(--bg);
+}
+
+.text-left {
+  text-align: left;
+}
+
+/* Topbar + contenido */
+.content {
+  flex: 1;
+  min-width: 0;
+}
+.topbar {
+  height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+.topbar .icon-btn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 0.65rem;
+  border: 1px solid var(--bs-border-color);
+  background: var(--surface);
+  color: var(--color-neutral-700);
+}
+.topbar .icon-btn:hover {
+  background: var(--surface-alt);
+}
+.topbar .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--color-neutral-100);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+}
+.topbar .dropdown {
+  position: relative;
+}
+.topbar .dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  display: none;
+  min-width: 200px;
+  padding: 0.4rem 0;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(var(--color-neutral-200-rgb), 0.6);
+  background: var(--surface);
+  box-shadow: 0 16px 34px rgba(var(--color-neutral-900-rgb), 0.18);
+  z-index: 1050;
+}
+.topbar .dropdown-menu.show {
+  display: block;
+}
+.topbar .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Ãrea de pÃ¡gina */
+.page {
+  padding: 2rem 4rem;
+}
+.breadcrumb-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+.page-title {
+  font-weight: 700;
+  margin: 0;
+}
+.breadcrumb {
+  --bs-breadcrumb-divider: '\u203A';
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+/* Cards y tablas tipo demo */
+.card {
+  border-radius: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.table {
+  overflow: hidden;
+}
+
+/* Formularios y botones */
+.form-control,
+.form-select {
+  font-size: 13px;
+  border-radius: 0.8rem;
+  background: var(--surface);
+  border-color: var(--bs-border-color);
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--brand);
+  box-shadow: var(--ring);
+}
+.btn {
+  border-radius: 0.7rem;
+}
+.btn-primary {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+.btn-outline-primary {
+  color: var(--brand);
+  border-color: var(--brand);
+}
+.btn-outline-primary:hover {
+  background: color-mix(in oklab, var(--brand), transparent 90%);
+}
+
+:root{
+  --bottom-nav-h: 110px; /* valor real aproximado para tu diseño */
+}

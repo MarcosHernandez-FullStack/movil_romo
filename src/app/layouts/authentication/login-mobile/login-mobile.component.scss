@@ -1,0 +1,296 @@
+:host {
+  display: block;
+}
+
+.login-mobile-container {
+  min-height: 100vh;
+  background: #1f2937;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+}
+
+.login-mobile-content {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #fff;
+  width: 100%;
+}
+
+.logo-circle {
+  width: 80px;
+  height: 80px;
+  background: #fff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.truck-icon {
+  font-size: 40px;
+  color: #2563eb;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 380px;
+}
+
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  border: 1px solid #fecaca;
+}
+
+.alert-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  font-size: 18px;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.9rem;
+  font-size: 1rem;
+  color: #1f2937;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  &.is-invalid {
+    border-color: #dc2626;
+    background: #fef2f2;
+  }
+
+  &:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+  }
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.8125rem;
+  margin-top: 0.375rem;
+  margin-left: 0.25rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.8rem;
+  border: none;
+  background: transparent;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #6b7280;
+  transition: color 0.2s ease, background 0.2s ease;
+
+  i {
+    font-size: 18px;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:hover {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.08);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.btn-login {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 0.9rem;
+  font-size: 1.06rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  margin-top: 0.5rem;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.loading-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.test-credentials {
+  text-align: center;
+  margin-top: 16px;
+  color: #6b7280;
+
+  .test-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .test-line {
+    font-size: 14px;
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .login-mobile-container {
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  }
+
+  .login-mobile-content {
+    box-shadow: none;
+    padding: 1.5rem 1rem;
+  }
+
+  .form-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .logo-circle {
+    width: 70px;
+    height: 70px;
+  }
+
+  .truck-icon {
+    font-size: 36px;
+  }
+
+  .form-input {
+    font-size: 0.95rem;
+    padding: 0.9rem 0.9rem 0.9rem 2.8rem;
+  }
+
+  .btn-login {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 481px) {
+  .login-mobile-container {
+    padding: 2rem 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

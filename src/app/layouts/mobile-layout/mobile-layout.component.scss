@@ -1,0 +1,38 @@
+// Este es el contenedor CLAVE que hace que se vea como app móvil
+.mobile-layout {
+  min-height: 100vh;
+  background: #1f2937; // Fondo oscuro para simular los bordes del dispositivo
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+}
+
+.mobile-container {
+  width: 100%;
+  max-width: 480px; // Ancho máximo tipo iPhone/Android - ESTO ES LO MÁS IMPORTANTE
+  min-height: 100vh;
+  background: #f9fafb;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow-x: hidden;
+}
+
+// En pantallas móviles reales, ocupa todo el ancho
+@media (max-width: 480px) {
+  .mobile-layout {
+    background: #f9fafb;
+    padding: 0;
+  }
+
+  .mobile-container {
+    box-shadow: none;
+  }
+}
+
+// En tablets y desktop, se mantiene centrado con ancho máximo
+@media (min-width: 481px) {
+  .mobile-layout {
+    padding: 2rem 0;
+  }
+}

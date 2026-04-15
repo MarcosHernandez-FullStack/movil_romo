@@ -1,0 +1,21 @@
+<div class="finished-page">
+  <div class="content">
+    <div class="icon-wrap">
+      <div class="icon-ring">
+        <i class="bi bi-check-lg"></i>
+      </div>
+    </div>
+
+    <h1>¡Servicio Finalizado!</h1>
+    <p class="sub">El proceso GPS se completó correctamente</p>
+
+    <div class="km-card">
+      <div class="km-title">ID DE SERVICIO</div>
+      <div class="km-value">{{ service?.codeLabel ?? 0 }}</div>
+    </div>
+
+    <button class="btn-back" type="button" (click)="back()">
+      Volver a Mis Servicios
+    </button>
+  </div>
+</div>

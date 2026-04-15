@@ -1,0 +1,60 @@
+.history-page {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding-bottom: 58px;
+}
+
+.history-header {
+  background: #1d4ed8;
+  color: #fff;
+  padding: 1.25rem 1rem 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-weight: 900;
+    font-size: 1.35rem;
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    opacity: 0.9;
+    font-weight: 600;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.9rem 1rem 0.25rem;
+}
+
+.tab {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-weight: 800;
+  color: #374151;
+
+  &.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+  }
+}
+
+.list {
+  padding: 0.75rem 1rem 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.empty {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 1rem;
+  color: #6b7280;
+  font-weight: 700;
+  text-align: center;
+}

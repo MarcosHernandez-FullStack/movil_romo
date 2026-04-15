@@ -1,0 +1,67 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h4 class="mb-0 text-primary">Usuarios</h4>
+    <div class="text-muted small">Administra cuentas, roles y estado</div>
+  </div>
+
+  <div class="d-flex gap-2">
+    @if (selected().length) {
+    <button class="btn btn-outline-danger btn-sm" (click)="confirmDelete()">
+      Eliminar seleccionados ({{ selected().length }})
+    </button>
+    }
+    <button class="btn btn-primary btn-sm" (click)="openCreate()">Nuevo usuario</button>
+  </div>
+</div>
+<div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+  <div class="input-group mb-3">
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="q"
+      (ngModelChange)="search()"
+      placeholder="Buscar por nombre, email o rol..."
+      aria-describedby="button-addon2"
+    />
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="refresh()">
+      r
+    </button>
+  </div>
+</div>
+@if (loading()) {
+<div class="alert alert-info">Cargando usuarios...</div>
+} @else {
+<app-table
+  [data]="users()"
+  [columns]="cols"
+  [selectable]="true"
+  [rowClickTogglesSelection]="true"
+  rowIdKey="id"
+  (selectionChange)="onSel($event)"
+>
+  <ng-template Cell="phone" let-row>
+    {{ row.phone || '—' }}
+  </ng-template>
+  <ng-template Cell="role" let-row>
+    <span class="badge text-bg-secondary text-capitalize">{{ row.role || '—' }}</span>
+  </ng-template>
+  <ng-template Cell="actions" let-row>
+    <div class="d-flex justify-content-end gap-1">
+      <button class="btn btn-sm btn-outline-primary" (click)="openEdit(row)">Editar</button>
+      <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(row)">Eliminar</button>
+    </div>
+  </ng-template>
+</app-table>
+}
+<app-user-form [(open)]="formOpen" [userId]="editingId" (saved)="refresh()"> </app-user-form>
+
+<app-modal [(open)]="confirmOpen" [title]="'Confirmar eliminación'" size="sm">
+  <div ModalBody>
+    @if (toDeleteSingle) { ¿Eliminar a <strong>{{ toDeleteSingle.fullName }}</strong
+    >? } @else { ¿Eliminar <strong>{{ selected().length }}</strong> usuarios seleccionados? }
+  </div>
+  <div ModalFooter class="d-flex gap-5">
+    <button class="btn btn-outline-secondary" (click)="confirmOpen = false">Cancelar</button>
+    <button class="btn btn-danger" (click)="removeConfirmed()">Eliminar</button>
+  </div>
+</app-modal>

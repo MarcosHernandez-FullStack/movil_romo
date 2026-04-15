@@ -1,0 +1,60 @@
+.modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgba(var(--color-neutral-900-rgb), 0.45);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  backdrop-filter: blur(1px);
+}
+.modal__dialog {
+  width: 100%;
+  max-width: 520px;
+  &.modal__dialog--sm {
+    max-width: 360px;
+  }
+  &.modal__dialog--lg {
+    max-width: 720px;
+  }
+  &.modal__dialog--xl {
+    max-width: 960px;
+  }
+  animation: modal-in 0.16s ease-out;
+}
+@keyframes modal-in {
+  from {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal__card {
+  background: var(--surface);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(var(--color-neutral-900-rgb), 0.18);
+  overflow: hidden;
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+.modal__body {
+  padding: 1rem;
+}
+.modal__footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--bs-border-color);
+  display: flex;
+  justify-content: space-around;
+  gap: 0.5rem;
+}

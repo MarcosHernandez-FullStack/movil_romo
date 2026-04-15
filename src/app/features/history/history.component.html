@@ -1,0 +1,28 @@
+<div class="history-page">
+  <app-header
+    variant="history"
+    title="Historial de Servicios"
+    [subtitle]="count + ' servicios encontrados'">
+  </app-header>
+
+
+  <div class="tabs">
+    <button class="tab" [class.active]="filter === 'todos'" (click)="setFilter('todos')">Todos</button>
+    <button class="tab" [class.active]="filter === 'en-curso'" (click)="setFilter('en-curso')">En Curso</button>
+    <button class="tab" [class.active]="filter === 'finalizados'" (click)="setFilter('finalizados')">Finalizados</button>
+  </div>
+
+  <main class="list">
+    <div class="empty" *ngIf="visible.length === 0">
+      No hay servicios para mostrar.
+    </div>
+
+    <app-service-card 
+    *ngFor="let s of visible" 
+    [service]="s"
+    [isLocked]="false"
+    >
+    </app-service-card>
+
+  </main>
+</div>

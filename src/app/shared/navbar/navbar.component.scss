@@ -1,0 +1,91 @@
+﻿:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+.app-navbar {
+  backdrop-filter: blur(8px);
+  background: rgba(var(--color-neutral-0-rgb), 0.75);
+  border-bottom: 1px solid rgba(var(--color-brand-500-rgb), 0.12);
+  box-shadow: 0 8px 20px rgba(var(--color-brand-600-rgb), 0.08);
+}
+.brand-badge {
+  --badge-size: 32px;
+  --badge-shadow: var(--brand-glow-md);
+  font-weight: 700;
+}
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.nav-link {
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.7rem;
+  font-weight: 500;
+  color: var(--color-neutral-700);
+}
+.nav-link:hover {
+  background: rgba(var(--color-brand-500-rgb), 0.08);
+  color: var(--color-neutral-900);
+}
+.nav-link.active {
+  background: rgba(var(--color-brand-500-rgb), 0.15);
+  color: var(--color-neutral-900);
+  box-shadow: inset 0 0 0 1px rgba(var(--color-brand-500-rgb), 0.22);
+}
+
+/* Toggler */
+.navbar-toggler {
+  border: 1px solid rgba(var(--color-brand-600-rgb), 0.25);
+}
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(var(--color-brand-500-rgb), 0.25);
+}
+
+/* Avatar dropdown */
+.user-dropdown {
+  position: relative;
+}
+.avatar-btn {
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: rgba(var(--color-neutral-100-rgb), 0.7);
+  border: 1px solid rgba(var(--color-neutral-200-rgb), 0.7);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.avatar-btn:hover {
+  background: rgba(var(--color-brand-500-rgb), 0.12);
+  border-color: rgba(var(--color-brand-500-rgb), 0.25);
+  transform: translateY(-1px);
+}
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+  font-weight: 700;
+}
+.dropdown-menu {
+  display: none;
+  min-width: 200px;
+  padding: 0.35rem 0;
+  margin-top: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(var(--color-neutral-200-rgb), 0.6);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+}
+.dropdown-menu.show {
+  display: block;
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

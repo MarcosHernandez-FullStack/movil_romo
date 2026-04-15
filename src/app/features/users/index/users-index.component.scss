@@ -1,0 +1,15 @@
+.toolbar {
+  gap: 0.5rem;
+}
+.status-badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+}
+.status-on {
+  background: var(--color-success-100);
+  color: var(--color-success-700);
+}
+.status-off {
+  background: var(--color-danger-100);
+  color: var(--color-danger-700);
+}

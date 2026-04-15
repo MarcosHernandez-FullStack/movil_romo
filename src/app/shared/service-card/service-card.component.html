@@ -1,0 +1,100 @@
+<a
+  class="service-card"
+  [class.locked]="isLocked"
+  [class.active-border]="service.estado !== 'pendiente'"
+  [routerLink]="['/mobile/services', service.idServicio]"
+  (click)="onCardClick($event)"
+  >
+
+  <div class="locked-overlay" *ngIf="isLocked">
+    <div class="locked-pill">
+      <i class="bi bi-lock"></i>
+      Servicio en curso activo
+    </div>
+  </div>
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="code-pill">{{ service.codeLabel }}</span>
+
+      <span *ngIf="service.esLargaDistancia" class="ld-pill">
+        <i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+        Larga Dist.
+      </span>
+    </div>
+
+    <span class="status-chip" [ngClass]="service.estado">
+      <ng-container *ngIf="service.estado !== 'en-progreso'; else activeDot">
+        <i [class]="'bi ' + statusIconClass"></i>
+      </ng-container>
+
+      <ng-template #activeDot>
+        <span class="status-dot"></span>
+      </ng-template>
+
+      <span class="status-text">
+        {{
+          service.estado === 'pendiente' ? 'Pendiente' :
+          service.estado === 'en-progreso' ? 'En curso' :
+          service.estado === 'completado' ? 'Completado' :
+          service.estado === 'cancelado' ? 'Cancelado' : service.estado
+        }}
+      </span>
+    </span>
+  </div>
+
+  <div class="card-info" style="pointer-events: none;">
+    <!-- <div class="info-row">
+      <i class="bi bi-clock info-ico" aria-hidden="true"></i>
+      <span class="time">{{ service.horaInicio }}</span>
+
+      <i class="bi bi-calendar3 info-ico" aria-hidden="true"></i>
+      <span class="date">{{ service.fecha }}</span>
+    </div> -->
+
+    <div class="items">
+      <div class="item">
+        <div class="item-ico blue">
+          <i class="bi bi-clock" aria-hidden="true"></i>
+        </div>
+        <div class="item-body">
+          <div class="item-label">Bloque Horario</div>
+          <div class="item-value">{{ service.horaInicio }} - {{service.horaFinal}}</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-ico">
+          <i class="bi bi-box-seam" aria-hidden="true"></i>
+        </div>
+        <div class="item-body">
+          <div class="item-label">Tipo de Carga</div>
+          <div class="item-value">
+            {{ service.cantidadVehiculos }} 
+            {{ service.cantidadVehiculos > 1 ? 'Vehículos' : 'Vehículo' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card-footer">
+      <div class="meta">
+        <span class="meta-pill">
+          <i class="bi bi-stopwatch" aria-hidden="true"></i>
+          {{ service.tiempoEstimadoMin }} min (est.)
+        </span>
+
+        <span class="meta-pill">
+          <i class="bi bi-signpost-split" aria-hidden="true"></i>
+          {{ service.distanciaKm }} km (est.)
+        </span>
+      </div>
+
+      <div class="cta">
+        Ver detalle <span class="chev">></span>
+      </div>
+    </div>
+  </div>
+</a>

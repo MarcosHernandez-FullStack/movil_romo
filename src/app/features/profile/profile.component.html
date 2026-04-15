@@ -1,0 +1,46 @@
+﻿<section class="profile">
+  <header class="profile__header surface-card">
+    <div class="profile__avatar">{{ user?.firstName?.[0] || user?.username?.[0] || 'U' }}</div>
+    <div>
+      <h1 class="profile__title">{{ user?.firstName }} {{ user?.lastName }}</h1>
+      <p class="profile__subtitle">{{ user?.email }}</p>
+    </div>
+  </header>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-6">
+      <article class="surface-card profile__card">
+        <h2 class="profile__card-title">Informacion de cuenta</h2>
+        <dl class="profile__list">
+          <div>
+            <dt>Usuario</dt>
+            <dd>{{ user?.username }}</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd>{{ user?.email }}</dd>
+          </div>
+          <div>
+            <dt>Rol</dt>
+            <dd>{{ user?.role }}</dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+    <div class="col-12 col-lg-6">
+      <article class="surface-card profile__card">
+        <h2 class="profile__card-title">Contacto</h2>
+        <dl class="profile__list">
+          <div>
+            <dt>Telefono</dt>
+            <dd>{{ user?.phone || 'No registrado' }}</dd>
+          </div>
+          <div>
+            <dt>Correo alterno</dt>
+            <dd>-</dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+  </div>
+</section>

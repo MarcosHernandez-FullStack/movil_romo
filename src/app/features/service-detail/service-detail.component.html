@@ -1,0 +1,386 @@
+<div class="detail-page">
+  <div class="top-bar" >
+    <button class="back" type="button" (click)="back()">
+      <i class="bi bi-arrow-left"></i>
+      Mis Rutas
+    </button>
+  </div>
+
+  <app-header
+    variant="detail"
+    [serviceCode] = "service?.codeLabel"
+    [status] = "service?.estado"
+  >
+  </app-header>
+
+  <section class="nav-persist">
+    <div class="nav-title">NAVEGACIÓN PERSISTENTE</div>
+
+    <div class="nav-actions">
+      <button type="button" class="nav-btn origin" (click)="goToOrigin()">
+        <i class="bi bi-geo-alt-fill"></i>
+        <span>Ir al Origen</span>
+        <i class="bi bi-box-arrow-up-right"></i>
+      </button>
+
+      <button type="button" class="nav-btn destination" (click)="goToDestination()">
+        <i class="bi bi-flag-fill"></i>
+        <span>Ir al Destino</span>
+        <i class="bi bi-box-arrow-up-right"></i>
+      </button>
+    </div>
+  </section>
+
+  <main class="detail-content" *ngIf="service; else notFound">
+    <div class="card card-duo">
+      <div class="duo-item">
+        <div class="duo-ico">
+          <i class="bi bi-clock"></i>
+        </div>
+        <div class="duo-body">
+          <div class="duo-label">Bloque Horario</div>
+          <div class="duo-value">{{ service.horaInicio }} - {{service.horaFinal}}</div>
+        </div>
+      </div>
+
+      <div class="duo-divider"></div>
+
+      <div class="duo-item">
+        <div class="duo-ico">
+          <i class="bi bi-calendar3"></i>
+        </div>
+        <div class="duo-body">
+          <div class="duo-label">Fecha</div>
+          <div class="duo-value">{{ service.fecha }}</div>
+        </div>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="section-head">
+        <i class="bi bi-person"></i>
+        <span>CLIENTE</span>
+      </div>
+
+      <div class="row-soft">
+        <div class="circle-ico">
+          <i class="bi bi-person"></i>
+        </div>
+        <div class="row-soft-body">
+          <div class="row-soft-title">{{ service.nombreCliente }}</div>
+            {{ service.cantidadVehiculos }} 
+            {{ service.cantidadVehiculos > 1 ? 'Vehículos' : 'Vehículo' }}
+        </div>
+      </div>
+    </section>
+
+    <div class="card">
+      <div class="card-title">Ruta del Servicio</div>
+
+      <div class="route">
+        <div class="route-point origin">
+          <div class="dot">
+            <i class="bi bi-geo-alt-fill"></i>
+          </div>
+          <div class="route-text">
+            <div class="label">Origen</div>
+            <div class="value">{{ service.origenDireccion }}</div>
+          </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="route-point destination">
+          <div class="dot">
+            <i class="bi bi-geo-alt-fill"></i>
+          </div>
+          <div class="route-text">
+            <div class="label">Destino</div>
+            <div class="value">{{ service.destinoDireccion }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="metrics">
+        <div class="metric-card blue">
+          <div class="metric-head">
+            <i class="bi bi-signpost-split"></i>
+            Distancia
+          </div>
+          <div class="metric-value">{{ service.distanciaKm }} km</div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-head">
+            <i class="bi bi-clock"></i>
+            Duración est.
+          </div>
+          <div class="metric-value">{{ service.tiempoEstimadoMin }} min</div>
+        </div>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="section-head">
+        <i class="bi bi-car-front"></i>
+        <span>VEHÍCULO A TRASLADAR</span>
+      </div>
+
+      <div class="vehicle-list" *ngIf="service.vehiculos.length > 0; else noVehiculos">
+        <div class="vehicle-row" *ngFor="let v of service.vehiculos">
+          <div class="vehicle-ico">
+            <i class="bi bi-car-front"></i>
+          </div>
+
+          <div class="vehicle-body">
+            <span class="plate-pill">{{ v.placa }}</span>
+            <div class="vehicle-name">{{ v.marca }} · {{ v.modelo }}</div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noVehiculos>
+        <div class="vehicle-empty">— Sin vehículos asignados —</div>
+      </ng-template>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <i class="bi bi-journal-text"></i>
+        <span>NOTAS ADICIONALES</span>
+      </div>
+
+      <div class="note-box">
+        {{ service.notas}}
+      </div>
+    </section>
+
+    <!-- <div *ngIf="service.estado === 'en-progreso'" style="margin-bottom: 12px;">
+
+      <div class="bottom-hint-complete-2" *ngIf="service.hasArrived; else waitingGps">
+        <div class="hint-icon success">
+          <i class="bi bi-pin-map"></i>
+        </div>
+        <span class="hint-text">
+          ¡Geocerca validada — Puedes finalizar el servicio!
+        </span>
+      </div>
+      <ng-template #waitingGps>
+        <div class="bottom-hint-waiting">
+          <div class="hint-icon waiting">
+            <i class="bi bi-geo-alt"></i>
+          </div>
+          <span class="hint-text">
+            Esperando validación GPS al llegar al destino...
+          </span>
+        </div>
+      </ng-template>
+    </div> -->
+
+    <section class="info-blue">
+      <div class="info-blue-ico">
+        <i class="bi bi-info-circle"></i>
+      </div>
+      <div class="info-blue-text">
+        Al finalizar, el sistema validará tu ubicación actual. El registro de hora y ubicación es automático; no requiere ingreso manual.
+      </div>
+    </section>
+
+    <footer class="bottom-cta" *ngIf="service">
+      <div class="bottom-hint" *ngIf="service.estado === 'pendiente'">Selecciona app de navegación e inicia el servicio</div>
+
+      <button class="btn-main" (click)="startServiceOnly()" *ngIf="service.estado === 'pendiente'">
+        <i class="bi bi-play-fill"></i>
+        Iniciar Servicio
+      </button>
+
+      <!-- <div class="bottom-hint-complete" *ngIf="service.hasArrived;">
+        <i class="bi bi-pin-map"></i>
+        ¡Geocerca validada! Botón habilitado
+      </div> -->
+
+      <button
+        class="btn-main"
+        (click)="openFinishModal()"
+        *ngIf="service.estado === 'en-progreso'"
+        [disabled]="isCheckingFinish"
+        >
+        <i class="bi bi-check2-square"></i>
+       {{ isCheckingFinish ? 'Validando ubicación...' : 'Finalizar Servicio' }}
+      </button>
+    </footer>
+  </main>
+
+  <ng-template #notFound>
+    <main class="detail-content">
+      <div class="empty">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p>No se encontró el servicio.</p>
+      </div>
+    </main>
+  </ng-template>
+
+  <div class="nav-modal" *ngIf="isNavModalOpen" (click)="closeNavModal()">
+    <div class="nav-sheet" (click)="$event.stopPropagation()">
+      <div class="nav-head">
+        <div 
+          class="nav-point-ico"
+          [ngClass]="navPoint === 'origen' ? 'ico-origin' : 'ico-dest'">
+          <i 
+            class="bi"
+            [ngClass]="navPoint === 'origen' ? 'bi-geo-alt-fill' : 'bi-flag-fill'">
+          </i>
+        </div>
+
+        <div class="nav-title">
+          <h3>Iniciar Navegación</h3>
+          <p>Selecciona una app para dirigirte al punto asignado</p>
+        </div>
+
+        <button class="nav-close" (click)="closeNavModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <button class="nav-option" (click)="selectGps('waze')">
+        <div class="opt-left">
+          <div class="opt-badge waze">
+            <i class="bi bi-send-fill"></i>
+          </div>
+          <div>
+            <div class="opt-name">Waze</div>
+            <div class="opt-sub">Navegación con alertas en tiempo real</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-right opt-arrow"></i>
+      </button>
+
+      <button class="nav-option" (click)="selectGps('googlemaps')">
+        <div class="opt-left">
+          <div class="opt-badge gmaps">
+            <i class="bi bi-geo-alt-fill"></i>
+          </div>
+          <div>
+            <div class="opt-name">Google Maps</div>
+            <div class="opt-sub">Navegación precisa con Street View</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-right opt-arrow"></i>
+      </button>
+
+      <div class="nav-point-body">
+        <div 
+          class="nav-point-label"
+          [ngClass]="navPoint === 'origen' ? 'label-origin' : 'label-dest'">
+          <i 
+            class="bi me-1"
+            [ngClass]="navPoint === 'origen' ? 'bi-geo-alt' : 'bi-flag'">
+          </i>
+          {{ navPoint === 'origen' ? 'Punto de recogida' : 'Punto de entrega' }}
+        </div>
+        <div class="nav-point-value">
+          {{ navPoint === 'origen' ? service?.origenDireccion : service?.destinoDireccion }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="finish-modal" *ngIf="isFinishModalOpen" (click)="closeFinishModal()">
+    <div class="finish-sheet" (click)="$event.stopPropagation()">
+
+      <div class="finish-grabber"></div>
+
+      <div class="finish-head">
+        <div class="finish-ico">
+          <i class="bi bi-shield-check"></i>
+        </div>
+
+        <div class="finish-title">
+          <h3>Confirmación Operativa</h3>
+          <p>Verifica antes de cerrar el servicio</p>
+        </div>
+
+        <button class="finish-close" (click)="closeFinishModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="finish-card" *ngIf="service">
+        <div class="finish-card-top">
+          <div class="finish-card-label">SERVICIO</div>
+          <span class="finish-pill">{{ service.codeLabel }}</span>
+        </div>
+
+        <div class="finish-route">
+          <div class="finish-addr origin">
+            <i class="bi bi-geo-alt-fill"></i>
+            <div>
+              <div class="addr-label">Origen</div>
+              <div class="addr-value">{{ service.origenDireccion }}</div>
+            </div>
+          </div>
+          <div class="finish-divider"></div>
+          <div class="finish-addr destination">
+            <i class="bi bi-flag-fill"></i>
+            <div>
+              <div class="addr-label">Destino</div>
+              <div class="addr-value">{{ service.destinoDireccion }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finish-section-title">
+        <span>CONFIRMACIÓN DE TAREAS</span>
+      </div>
+
+      <label class="finish-check">
+        <input type="checkbox" [(ngModel)]="finishConfirmed" />
+        <span class="check-ui"></span>
+        <span class="check-text">
+          Confirmo la ejecución de todas las tareas operativas y la entrega en el punto de destino
+        </span>
+      </label>
+
+      <button class="finish-btn" [disabled]="!finishConfirmed" (click)="confirmFinish()">
+        <i class="bi bi-shield-check"></i>
+        Confirmar Finalización
+      </button>
+
+    </div>
+  </div>
+
+  <div class="far-modal" *ngIf="isFarModalOpen" (click)="closeFarModal()">
+    <div class="far-sheet" (click)="$event.stopPropagation()">
+
+      <div class="far-grabber"></div>
+
+      <div class="far-head">
+        <div class="far-ico">
+          <i class="bi bi-geo-alt"></i>
+        </div>
+
+        <div class="far-title">
+          <h3>Aún estás lejos del destino</h3>
+          <p>
+            Estás a <b>{{ distanceToDestMeters }}</b> metros aprox.
+            del punto de entrega. Acércate para poder finalizar el servicio.
+          </p>
+        </div>
+
+        <button class="far-close" (click)="closeFarModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="far-actions">
+        <button class="far-btn" (click)="closeFarModal()">
+          Entendido
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+﻿<aside class="sidebar" [class.open]="open">
+  <!-- Brand -->
+
+  <div class="brand">
+    <span class="logo-badge u-badge u-badge--brand">{{ brandIcon }}</span>
+    <span class="brand-name">{{ brandTitle }}</span>
+    <button
+      class="btn btn-sm btn-light d-lg-none ms-auto"
+      (click)="setOpen(false)"
+      aria-label="Cerrar menu"
+    >
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
+
+  <!-- Scrollable area -->
+  <div class="nav-scroll">
+    @for (section of nav; track section; let si = $index) {
+      @if (section.title) {
+        <div class="nav-section">{{ section.title }}</div>
+      }
+      @for (it of section.items; track it; let ii = $index) {
+        @if (!it.children?.length) {
+          @if (it.route) {
+            <a
+              class="nav-link"
+              [routerLink]="it.route"
+              routerLinkActive="active"
+              (click)="onNavigate(it.route, it.command)"
+            >
+              @if (it.icon) {
+                <i class="bi" [class]="it.icon"></i>
+              }
+              <span class="flex-1 text-left">{{ it.label }}</span>
+              @if (it.badge != null) {
+                <span class="menu-badge">{{ it.badge }}</span>
+              }
+            </a>
+          }
+          @else {
+            <button type="button" class="nav-link nav-link-btn" (click)="onNavigate(undefined, it.command)">
+              @if (it.icon) {
+                <i class="bi" [class]="it.icon"></i>
+              }
+              <span class="flex-1 text-left">{{ it.label }}</span>
+              @if (it.badge != null) {
+                <span class="menu-badge">{{ it.badge }}</span>
+              }
+            </button>
+          }
+        }
+        @else {
+          <button type="button" class="nav-link nav-link-btn" (click)="toggleGroup(key(si, ii))">
+            @if (it.icon) {
+              <i class="bi" [class]="it.icon"></i>
+            }
+            <span class="flex-1 text-left">{{ it.label }}</span>
+            <i
+              class="bi"
+              [class.bi-chevron-up]="isOpen(key(si, ii))"
+              [class.bi-chevron-down]="!isOpen(key(si, ii))"
+            ></i>
+          </button>
+
+          <div class="nav-children" [style.display]="isOpen(key(si, ii)) ? 'block' : 'none'">
+            @for (child of it.children; track child) {
+              <a
+                class="nav-sublink"
+                [routerLink]="child.route || '/'"
+                routerLinkActive="active"
+                (click)="onNavigate(child.route, child.command)"
+              >
+                {{ child.label }}
+                @if (child.badge != null) {
+                  <span class="menu-badge ms-2">{{ child.badge }}</span>
+                }
+              </a>
+            }
+          </div>
+        }
+      }
+    }
+  </div>
+</aside>
+

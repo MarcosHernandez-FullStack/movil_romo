@@ -1,0 +1,63 @@
+﻿<nav class="navbar navbar-expand-lg app-navbar border-bottom">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/" (click)="closeAll()">R3 Panel</a>
+
+    <!-- Burger movil -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="toggle()"
+      [attr.aria-expanded]="open"
+      aria-label="Toggle navigation"
+    >
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" [class.show]="open">
+      <!-- Left: navegacion -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a routerLink="/dashboard" routerLinkActive="active" class="nav-link" (click)="closeAll()"
+            >Dashboard</a
+          >
+        </li>
+        <li class="nav-item">
+          <a routerLink="/users" routerLinkActive="active" class="nav-link" (click)="closeAll()"
+            >Usuarios</a
+          >
+        </li>
+      </ul>
+
+      <!-- Right: auth -->
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <ng-container *ngIf="auth.isAuthenticated; else loginBtn">
+          <div class="dropdown user-dropdown" [class.show]="userMenu">
+            <button
+              class="btn avatar-btn d-flex align-items-center gap-2"
+              type="button"
+              (click)="toggleUserMenu()"
+              [attr.aria-expanded]="userMenu"
+              aria-haspopup="true"
+            >
+              <span class="avatar">{{ initials }}</span>
+              <span class="d-none d-sm-inline text-truncate user-name">{{ displayName }}</span>
+              <i class="bi" [class.bi-chevron-up]="userMenu" [class.bi-chevron-down]="!userMenu"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end" [class.show]="userMenu">
+              <button class="dropdown-item" type="button" (click)="goToProfile()">
+                <i class="bi bi-person-circle me-2"></i> Perfil
+              </button>
+              <button class="dropdown-item text-danger" type="button" (click)="onLogout()">
+                <i class="bi bi-box-arrow-right me-2"></i> Salir
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #loginBtn>
+          <a class="btn btn-primary btn-sm" routerLink="/login" (click)="closeAll()">Ingresar</a>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</nav>

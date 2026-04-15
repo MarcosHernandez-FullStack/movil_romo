@@ -1,0 +1,21 @@
+.loader-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(var(--color-neutral-0-rgb), 0.6);
+  backdrop-filter: blur(2px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--surface);
+  box-shadow: 0 10px 30px rgba(var(--color-neutral-900-rgb), 0.12);
+}

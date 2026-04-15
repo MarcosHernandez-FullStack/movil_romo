@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+.auth-hero {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(2rem, 6vh, 6rem);
+  background: var(--bg);
+  /* Cambia el fondo con --bg-mode */
+  background-image: radial-gradient(
+      900px 500px at -10% -10%,
+      rgba(var(--color-brand-500-rgb), 0.12),
+      transparent
+    ),
+    radial-gradient(800px 480px at 110% 0%, rgba(var(--color-brand-700-rgb), 0.1), transparent),
+    linear-gradient(180deg, var(--surface-alt), color-mix(in oklab, var(--surface-alt), white 12%));
+}
+:root[style*='--bg-mode: solid'] .auth-hero,
+.auth-hero:is([data-bg='solid']) {
+  background-image: none;
+  background: var(--surface-alt);
+}
+
+.auth-card {
+  --glass-radius: 1.25rem;
+  --glass-shadow: var(--glass-shadow-lg);
+}
+
+.brand {
+  text-align: center;
+}
+.brand-icon {
+  --badge-size: 3rem;
+  --badge-shadow: var(--brand-glow-lg);
+  margin-bottom: 0.5rem;
+  justify-self: center;
+}
+.brand-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.form-floating > .form-control {
+  border-radius: 999px;
+  border-color: var(--bs-border-color);
+  background-color: rgba(var(--color-neutral-0-rgb), 0.95);
+  padding-left: 1.1rem;
+  padding-right: 3rem;
+}
+.invalid-feedback {
+  margin-left: 0.75rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--bs-border-color);
+}
+
+.social-login {
+  display: grid;
+}
+
+.google-btn-slot > div {
+  width: 100%;
+}

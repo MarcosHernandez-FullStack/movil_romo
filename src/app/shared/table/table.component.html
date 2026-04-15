@@ -1,0 +1,108 @@
+<div class="tabla-base card">
+  <div class="tabla-toolbar">
+    <ng-content select="[tablaToolbar]"></ng-content>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          @if (selectable) {
+          <th style="width: 38px">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [checked]="allVisibleSelected()"
+              (change)="toggleAllVisible($any($event.target).checked)"
+            />
+          </th>
+          } @for (col of columns; track col.key) {
+          <th
+            [style.width]="col.width"
+            [class.text-center]="col.align === 'center'"
+            [class.text-end]="col.align === 'end'"
+          >
+            <button class="th-btn" [class.sortable]="col.sortable" (click)="toggleSort(col)">
+              <span>{{ col.header }}</span>
+              @if (col.sortable) {
+              <i
+                class="bi"
+                [class.bi-arrow-down-up]="sortKey !== col.key || !sortDir"
+                [class.bi-caret-up-fill]="sortKey === col.key && sortDir === 'asc'"
+                [class.bi-caret-down-fill]="sortKey === col.key && sortDir === 'desc'"
+              ></i>
+              }
+            </button>
+          </th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (!pagedData.length) {
+        <tr>
+          <td [attr.colspan]="columns.length + (selectable ? 1 : 0)">
+            <div class="py-4 text-center text-muted">Sin datos</div>
+          </td>
+        </tr>
+        } @else { @for (row of pagedData; track row) {
+        <tr (click)="onRowClick(row, $event)" [class.is-selected]="isSelected(row)">
+          @if (selectable) {
+          <td>
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [checked]="isSelected(row)"
+              (change)="toggleRow(row, $any($event.target).checked)"
+            />
+          </td>
+          } @for (col of columns; track col.key) {
+          <td [class.text-center]="col.align === 'center'" [class.text-end]="col.align === 'end'">
+            @let cellTpl = tplFor(col.key); @if (cellTpl) {
+            <ng-container
+              [ngTemplateOutlet]="cellTpl"
+              [ngTemplateOutletContext]="{ $implicit: row, row: row, col: col }"
+            >
+            </ng-container>
+            } @else {
+            {{ valueOf(row, col.key) }}
+            }
+          </td>
+          }
+        </tr>
+        } }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tabla-footer d-flex align-items-center gap-2">
+    <div class="text-muted small flex-grow-1">
+      Mostrando {{ fromIndex }} – {{ toIndex }} de {{ total }}
+    </div>
+
+    <select
+      class="form-select form-select-sm w-auto"
+      [ngModel]="pageSize"
+      (ngModelChange)="setPageSize($event)"
+    >
+      @for (n of pageSizeOptions; track n) {
+      <option [ngValue]="n">{{ n }}/página</option>
+      }
+    </select>
+
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-outline-secondary" [disabled]="page <= 1" (click)="setPage(page - 1)">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <button class="btn btn-outline-secondary disabled">{{ page }}/{{ totalPages }}</button>
+      <button
+        class="btn btn-outline-secondary"
+        [disabled]="page >= totalPages"
+        (click)="setPage(page + 1)"
+      >
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<ng-content></ng-content>

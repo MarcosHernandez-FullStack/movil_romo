@@ -1,0 +1,255 @@
+.profile-page {
+  min-height: 100dvh;
+  background: #f4f7fb;
+  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
+}
+
+/* HEADER AZUL RECTO */
+.profile-header {
+  background: #2563eb;
+  color: #fff;
+  padding: 22px 18px 26px;
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.name {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.id {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+/* CONTENIDO */
+.content {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 14px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e7edf7;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.06);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.stat-label {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+/* HEAD DE CARD */
+.card-head {
+  margin-bottom: 10px;
+}
+
+.head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #8a98ad;
+}
+
+/* LISTA INTERNA CON DIVISORES */
+.list {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #eef2f7;
+  }
+}
+
+.row-ico {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #eef2f7;
+
+  i { font-size: 16px; }
+}
+
+.row-ico.blue {
+  background: #eff6ff;
+  border-color: #cfe0ff;
+  i { color: #2563eb; }
+}
+
+.row-ico.green {
+  background: #ecfdf5;
+  border-color: #bbf7d0;
+  i { color: #16a34a; }
+}
+
+.row-ico.neutral {
+  background: #f8fafc;
+  i { color: #64748b; }
+}
+
+.row-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.row-value {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #111827;
+  text-align: right;
+}
+
+.row-value.link {
+  color: #2563eb;
+}
+
+/* CHIP "Vigente" */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  border: 1px solid transparent;
+
+  i { font-size: 14px; }
+}
+
+.chip.ok {
+  background: #ecfdf3;
+  border-color: #bbf7d0;
+  color: #15803d;
+}
+
+/* BOTON LOGOUT */
+.btn-logout {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 16px 14px;
+  background: #d3163a;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  box-shadow: 0 14px 26px rgba(211, 22, 58, 0.22);
+
+  &:active { transform: scale(0.99); }
+
+  i { font-size: 18px; }
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 10px 0 0;
+  color: #94a3b8;
+}
+
+.footer-main {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.footer-sub {
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+///////////////////////////////////////////////
+.stats-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  background: #ffffff;
+  border: 1px solid #e6ebf5;
+  border-radius: 18px;
+
+  padding: 18px 18px;
+
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+  min-height: 10px;
+  margin-bottom: 14px;
+}
+.stats-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+
+  background: #eff6ff;
+  border: 1px solid #cfe0ff;
+
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+
+  i {
+    font-size: 34px;
+    color: #2563eb;
+    line-height: 1;
+  }
+}
+.stats-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stats-number {
+  font-size: 40px;
+  font-weight: 700;
+  color: #3f6aa5; /* oscuro suave */
+  line-height: 1;
+}
+.stats-label {
+  font-size: 20px;
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 0.01em;
+}
