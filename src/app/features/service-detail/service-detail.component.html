@@ -407,7 +407,9 @@
       </div>
 
       <div class="result-title" [class.result-title--success]="resultSuccess" [class.result-title--error]="!resultSuccess">
-        {{ resultSuccess ? '¡Servicio iniciado!' : 'No se pudo iniciar' }}
+        {{ resultSuccess
+            ? (resultContext === 'finalizar' ? '¡Servicio finalizado!' : '¡Servicio iniciado!')
+            : (resultContext === 'finalizar' ? 'No se pudo finalizar' : 'No se pudo iniciar') }}
       </div>
 
       <div class="result-message">{{ resultMessage }}</div>

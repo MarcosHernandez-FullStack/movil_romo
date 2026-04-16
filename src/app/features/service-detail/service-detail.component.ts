@@ -47,6 +47,7 @@ export class ServiceDetailComponent implements OnDestroy {
   isResultModalOpen = false;
   resultSuccess = false;
   resultMessage = '';
+  resultContext: 'iniciar' | 'finalizar' = 'iniciar';
   isStarting = false;
 
   private onVisibilityChange = () => {
@@ -180,9 +181,10 @@ export class ServiceDetailComponent implements OnDestroy {
     });
   }
 
-  openResultModal(success: boolean, message: string): void {
+  openResultModal(success: boolean, message: string, context: 'iniciar' | 'finalizar' = 'iniciar'): void {
     this.resultSuccess = success;
     this.resultMessage = message;
+    this.resultContext = context;
     this.isResultModalOpen = true;
     document.body.style.overflow = 'hidden';
   }
@@ -369,16 +371,16 @@ export class ServiceDetailComponent implements OnDestroy {
         this.closeFinishModal();
         if (res.exitoso === 1) {
           this.servicesService.finishService(this.service!.idServicio);
-          this.openResultModal(true, res.mensaje);
+          this.openResultModal(true, res.mensaje, 'finalizar');
         } else {
-          this.openResultModal(false, res.mensaje);
+          this.openResultModal(false, res.mensaje, 'finalizar');
         }
       },
       error: (err) => {
         this.isFinishing = false;
         this.closeFinishModal();
         const msg = err?.error?.mensaje || 'Ocurrió un error al finalizar el servicio';
-        this.openResultModal(false, msg);
+        this.openResultModal(false, msg, 'finalizar');
       },
     });
   }
