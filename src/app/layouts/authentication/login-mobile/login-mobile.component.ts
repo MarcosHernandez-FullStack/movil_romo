@@ -48,6 +48,13 @@ export class LoginMobileComponent {
 
   private handleLoginSuccess(): void {
     this.loading = false;
+
+    if (this.auth.role !== 'OPERADOR') {
+      this.auth.logout();
+      this.errorMessage = 'Credenciales inválidas';
+      return;
+    }
+
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || 'mobile/services';
     this.router.navigateByUrl(returnUrl);
   }

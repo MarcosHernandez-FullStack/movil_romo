@@ -66,6 +66,8 @@ export class ServicesComponent implements OnInit {
         this.services = data ?? [];
         this.isLoading = false;
 
+        this.userInfo = { ...this.userInfo, assignedServicesCount: this.services.length };
+
         this.activeService = this.services.find((s) => s.estado === 'en-progreso');
 
         this.upcomingServices  = this.services.filter((s) => s.estado === 'pendiente');
