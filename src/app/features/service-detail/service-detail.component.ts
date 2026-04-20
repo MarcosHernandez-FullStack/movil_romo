@@ -30,7 +30,7 @@ export class ServiceDetailComponent implements OnDestroy {
   private servicesService = inject(ServicesService);
   private http = inject(HttpClient);
 
-  private metrosCercania = 200;
+  private metrosCercania: number | null = null;
 
 
   service?: ServiceApiModel;
@@ -73,7 +73,8 @@ export class ServiceDetailComponent implements OnDestroy {
     });
 
     this.http.get<{ metrosCercania: number }>(`${environment.apiUrl}/configuracion/parametro-operativo`)
-      .subscribe({ next: p => { if (p.metrosCercania > 0) this.metrosCercania = p.metrosCercania; } });
+      .subscribe({ next: p => { if (p.metrosCercania > 0) this.metrosCercania = p.metrosCercania; },
+                   error: ()  => { this.metrosCercania = null; } });
   }
 
   ngOnDestroy(): void {
@@ -279,6 +280,11 @@ export class ServiceDetailComponent implements OnDestroy {
     // console.log('Distancia en metros:', coords);
 
     this.zone.run(() => {
+      if (this.metrosCercania === null) {
+        this.openResultModal(false, 'En estos momentos no puede finalizar el servicio, intente más tarde.', 'finalizar');
+        return;
+      }
+
       if (distance <= this.metrosCercania) {
         this.finishConfirmed = false;
         this.isFinishModalOpen = true;
