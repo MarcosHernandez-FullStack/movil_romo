@@ -25,7 +25,7 @@ type UserPayload = {
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private http = inject(HttpClient);
-  private base = `${environment.apiUrl}/api/Usuario`;
+  private base = `${environment.apiUrl}/Usuario`;
 
   private toView(u: ApiUser): UserView {
     return {

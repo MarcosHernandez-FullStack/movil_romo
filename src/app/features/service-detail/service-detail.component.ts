@@ -1,12 +1,14 @@
 import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { ServicesService, OperacionResult } from '../../core/services/services.service';
 import { ServiceApiModel } from '../../models/service.model';
 import { HeaderComponent } from "../../shared/header/header.component";
 import { FormsModule } from '@angular/forms';
 import { Geolocation, PermissionStatus } from '@capacitor/geolocation';
 import { Capacitor } from '@capacitor/core';
+import { environment } from '../../../environments/environment';
 
 type GpsApp = 'waze' | 'googlemaps';
 type NavPoint = 'origen' | 'destino';
@@ -26,6 +28,9 @@ export class ServiceDetailComponent implements OnDestroy {
   private location = inject(Location);
   private route = inject(ActivatedRoute);
   private servicesService = inject(ServicesService);
+  private http = inject(HttpClient);
+
+  private metrosCercania = 200;
 
 
   service?: ServiceApiModel;
@@ -66,6 +71,9 @@ export class ServiceDetailComponent implements OnDestroy {
       next: (svc) => (this.service = svc),
       error: (err) => console.error('Error cargando servicio:', err),
     });
+
+    this.http.get<{ metrosCercania: number }>(`${environment.apiUrl}/configuracion/parametro-operativo`)
+      .subscribe({ next: p => { if (p.metrosCercania > 0) this.metrosCercania = p.metrosCercania; } });
   }
 
   ngOnDestroy(): void {
@@ -271,7 +279,7 @@ export class ServiceDetailComponent implements OnDestroy {
     // console.log('Distancia en metros:', coords);
 
     this.zone.run(() => {
-      if (distance <= 200) {
+      if (distance <= this.metrosCercania) {
         this.finishConfirmed = false;
         this.isFinishModalOpen = true;
         document.body.style.overflow = 'hidden';

@@ -47,7 +47,7 @@ export class ServicesService {
   private servicesSubject = new BehaviorSubject<ServiceApiModel[]>([]);
   services$ = this.servicesSubject.asObservable();
 
-  private readonly apiUrl = `${environment.apiUrl}/api/Operaciones`;
+  private readonly apiUrl = `${environment.apiUrl}/Operaciones`;
 
   getServices(fechaServicio?: string): Observable<ServiceApiModel[]> {
     const idOperador = this.authService.user?.idOperador;

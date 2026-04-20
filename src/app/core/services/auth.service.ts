@@ -27,14 +27,14 @@ export class AuthService {
   }
 
   login(identificador: string, contrasena: string): Observable<LoginResponse> {
-    const url = `${environment.apiUrl}/api/Auth/login`;
+    const url = `${environment.apiUrl}/Auth/login`;
     return this.http
       .post<LoginResponse>(url, { identificador, contrasena })
       .pipe(tap((res) => this.setSessionFromApi(res)));
   }
 
   loginWithGoogle(credential: string): Observable<LoginResponse> {
-    const url = `${environment.apiUrl}/api/login/google`;
+    const url = `${environment.apiUrl}/login/google`;
     return this.http
       .post<LoginResponse>(url, { idToken: credential })
       .pipe(tap((res) => this.setSessionFromApi(res)));
