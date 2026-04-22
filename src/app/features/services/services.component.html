@@ -1,5 +1,5 @@
 <div class="services-page">
-  <app-header [userName]="userInfo.fullName" [servicesCount]="userInfo.assignedServicesCount"></app-header>
+  <app-header [userName]="userInfo.fullName" [servicesCount]="userInfo.assignedServicesCount" (refresh)="loadData()"></app-header>
 
   <main class="main-content">
     <div class="services-section">

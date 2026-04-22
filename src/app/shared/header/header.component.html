@@ -35,4 +35,14 @@
     </ng-template>
 
   </div>
+
+  <button
+    *ngIf="variant === 'default'"
+    class="refresh-btn"
+    [class.spinning]="isRefreshing"
+    (click)="onRefresh()"
+    aria-label="Actualizar"
+  >
+    <i class="bi bi-arrow-clockwise"></i>
+  </button>
 </header>

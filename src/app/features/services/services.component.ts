@@ -54,7 +54,7 @@ export class ServicesComponent implements OnInit {
     return `${y}-${m}-${d}`;
   }
 
-  private loadData(): void {
+  loadData(): void {
     this.servicesService.getUserInfo().subscribe({
       next: (data) => (this.userInfo = data),
       error: (err) => console.error('Error cargando usuario:', err),

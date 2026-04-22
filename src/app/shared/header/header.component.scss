@@ -1,6 +1,39 @@
 .app-header {
+  position: relative;
   padding: 1rem 1rem 1rem;
   color: #fff;
+}
+
+.refresh-btn {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  i { font-size: 16px; }
+
+  &:active { background: rgba(255, 255, 255, 0.3); }
+
+  &.spinning i {
+    animation: spin 0.7s linear;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 .app-header.default,

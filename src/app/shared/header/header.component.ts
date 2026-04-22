@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 type HeaderVariant = 'default' | 'history' | 'detail';
@@ -20,6 +20,17 @@ export class HeaderComponent {
   @Input() servicesCount?: number;
 
   @Input() variant: HeaderVariant = 'default';
+
+  @Output() refresh = new EventEmitter<void>();
+
+  isRefreshing = false;
+
+  onRefresh(): void {
+    if (this.isRefreshing) return;
+    this.isRefreshing = true;
+    this.refresh.emit();
+    setTimeout(() => (this.isRefreshing = false), 1000);
+  }
 
   @Input() serviceCode?: string;
   @Input() status?: ServiceStatus;
