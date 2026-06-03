@@ -54,12 +54,13 @@ export class ServicesService {
 
     let params = new HttpParams();
     if (idOperador)    params = params.set('idOperador',    idOperador.toString());
-    if (fechaServicio) params = params.set('fechaServicio', fechaServicio);
+    if (fechaServicio) params = params.set('fechaInicio',   fechaServicio)
+                                      .set('fechaFin',     fechaServicio);
 
     return this.http
-      .get<ReservaApi[]>(this.apiUrl, { params })
+      .get<{ datos: ReservaApi[] }>(this.apiUrl, { params })
       .pipe(
-        map(reservas => reservas.map(r => this.mapToModel(r))),
+        map(response => (response?.datos ?? []).map(r => this.mapToModel(r))),
         tap(servicios => this.servicesSubject.next(servicios))
       );
   }
@@ -126,7 +127,7 @@ export class ServicesService {
   }
 
   private mapToModel(r: ReservaApi): ServiceApiModel {
-    const fecha = new Date(r.fechaServicio);
+    const fecha = new Date(r.fechaServicio + 'T00:00:00');
     const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
     const fechaLabel = `${fecha.getDate()} ${meses[fecha.getMonth()]}`;
 
