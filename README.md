@@ -1,86 +1,222 @@
-# Frontend Base Angular 20
+# ROMO — App Móvil de Operadores
 
-Aplicacion web de panel administrativo construida con Angular 20 y componentes standalone. Incluye autenticacion por roles, gestion de usuarios, tablero de indicadores y un sistema de UI reutilizable basado en Bootstrap 5.
+Aplicación Angular + Capacitor para el sistema **ROMO**. Ofrece dos portales sobre la misma base de código: una **app Android** para operadores de grúa (gestión de servicios con GPS) y un **panel web** para administradores (gestión de usuarios y dashboard).
 
-## Caracteristicas principales
+---
 
-- Autenticacion contra API externa (`/api/login/authenticate`) con persistencia de sesion en `localStorage`, guards de ruta (`canMatch`, `canActivate`) y cierre de sesion centralizado.
-- Layout de administrador con barra lateral dinamica, header con menu de perfil y manejo responsive desde `AdminComponent`.
-- Pagina de dashboard con widgets de resumen, graficos de tendencia y acciones rapidas accionadas desde `AuthService`.
-- Modulo de usuarios con tabla reutilizable, filtros, formularios reactivos, roles cargados desde `/api/Usuario/roles` y soporte para altas, ediciones y bajas en lote.
-- Conjunto de componentes compartidos (`shared/`) para tabla, modal, loader, sidebar y utilidades que facilitan la extension del proyecto.
-- Preparado para renderizado del lado del servidor mediante `@angular/ssr` y servidor Express (`src/server.ts`).
+## Arquitectura de la aplicación
 
-## Stack tecnico
-
-- Angular 20 (standalone components y Angular Router)
-- RxJS para flujos asincronos
-- Angular Forms (reactive forms)
-- Bootstrap 5 y Bootstrap Icons para el diseno
-- SweetAlert2 para dialogos enriquecidos
-- Express + Angular SSR para despliegues con renderizado en servidor
-
-## Estructura relevante
+El proyecto organiza el código en capas con componentes standalone:
 
 ```
-src/
-  app/
-    core/          # Servicios, guards e interceptores
-    layouts/       # Layouts de autenticacion y administrador
-    features/      # Modulos de negocio (dashboard, profile, users)
-    models/        # Modelos compartidos entre UI y API
-    shared/        # Componentes reutilizables (tabla, modal, loader, sidebar, utils)
-  environments/    # Configuracion de API por entorno
-  server.ts        # Servidor Express para SSR
+src/app/
+├── core/      → Guards, interceptores y servicios de alcance global
+├── features/  → Módulos de negocio compartidos por ambos portales (lazy-loaded)
+├── shared/    → Componentes reutilizables (tabla, modal, loader, tarjetas)
+├── layouts/   → Shells de navegación: admin (sidebar), mobile (bottom nav), login
+└── models/    → Interfaces TypeScript por dominio
 ```
 
-Consulta `docs/architecture.md` para revisar las reglas completas de cada capa y las dependencias permitidas.
+El mismo módulo `features` sirve a las rutas `/admin/*` y `/mobile/*`. El layout que se renderiza depende del portal al que accede el usuario según su rol.
+
+---
+
+## Stack tecnológico
+
+| Área              | Tecnología                                     |
+|-------------------|------------------------------------------------|
+| Framework         | Angular 20 (standalone components)             |
+| Estilos           | Bootstrap 5.3 + Bootstrap Icons + SCSS         |
+| Mobile (APK)      | Capacitor 8 — Android (min SDK 24, target 36)  |
+| GPS               | `@capacitor/geolocation`                       |
+| Alertas           | SweetAlert2                                    |
+| Auth extra        | Google OAuth 2.0 (solo portal admin web)       |
+| SSR               | Express 5 + `@angular/ssr`                     |
+| Testing           | Karma + Jasmine                                |
+| Lenguaje          | TypeScript 5.9 (strict mode)                   |
+
+---
 
 ## Requisitos previos
 
-- Node.js 20 LTS (recomendado)
-- npm 10+
-- Angular CLI 20 (`npm install -g @angular/cli`), opcional si se desea usar la CLI globalmente
+### Desarrollo web
+- [Node.js](https://nodejs.org/) 22
+- npm ≥ 10.8
+- Angular CLI 20: `npm install -g @angular/cli`
 
-## Configuracion de entorno
+### Build Android (APK)
+- [Android Studio](https://developer.android.com/studio) con Android SDK
+- SDK Platform 36 (Android 16), min SDK 24 instalado
+- Capacitor CLI: incluido en devDependencies (`npx cap`)
+- Variables `ANDROID_HOME` / `JAVA_HOME` configuradas en el sistema
 
-Actualiza las URLs de API y el `googleClientId` en los archivos de entorno segun el backend disponible:
+---
 
-- Desarrollo: `src/environments/environment.development.ts`
-- Produccion (build por defecto): `src/environments/environment.ts`
+## Configuración de entornos
 
-```
+Los archivos de entorno están en `src/environments/`:
+
+**`environment.ts`** — Build por defecto (producción)
+```typescript
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:44330',
-  googleClientId: 'TU_CLIENT_ID_DE_GOOGLE'
+  apiUrl: 'http://localhost:5016/api',
+  // apiUrl: 'https://ca-back-romo.whitedesert-ca97fbc6.eastus2.azurecontainerapps.io/api',
+  googleClientId: '498361177128-...',
 };
 ```
 
-## Puesta en marcha
+**`environment.development.ts`** — `ng serve` en desarrollo
 
-1. Instalar dependencias: `npm install`
-2. Levantar el servidor de desarrollo: `npm start`
-3. Abrir `http://localhost:4200/`
+> Descomenta la línea de Azure en `apiUrl` para apuntar a producción.  
+> `googleClientId` es requerido para el login con Google en el portal admin web.
 
-El servidor recarga automaticamente ante cambios en el codigo fuente.
+---
 
-## Scripts disponibles
+## Roles y portales
 
-- `npm start`: ejecuta `ng serve` con configuracion de desarrollo.
-- `npm run build`: genera el build optimizado en `dist/frontend-ng20/browser`.
-- `npm run watch`: ejecuta build incremental con `--watch`.
-- `npm test`: ejecuta pruebas unitarias con Karma y Jasmine.
-- `npm run serve:ssr:frontend-ng20`: inicia el servidor Node (`dist/frontend-ng20/server/server.mjs`) para probar SSR despues de un `ng build` o `ng build --configuration production --ssr`.
+El sistema maneja un único flujo de autenticación JWT con redirección automática según el rol:
 
-## Pruebas y calidad
+| Rol | Portal | Layout | Login |
+|-----|--------|--------|-------|
+| `ADMINISTRADOR` | `/admin` | Sidebar + header | Email/pass o Google OAuth |
+| `OPERADOR` | `/mobile` | Bottom nav | Usuario + password (sin Google) |
 
-- Las pruebas unitarias usan Karma + Jasmine (`npm test`).
-- El formato de codigo se controla con Prettier (configuracion incluida en `package.json`).
-- Sigue las convenciones de Angular CLI para generar nuevos componentes (`ng generate ...`). Se recomienda usar siempre componentes standalone para mantener consistencia con el proyecto actual.
+El guard `canMatch` + `canActivate` valida el rol antes de activar cada rama de rutas. Si la sesión no existe o expiró, redirige a `/login`.
 
-## Consideraciones de despliegue
+**Sesión:** se almacena en `localStorage` bajo la clave `auth.session` como `{ token, user }`.
 
-- Genera el build de produccion con `ng build --configuration production --ssr` para crear artefactos de cliente y servidor.
-- Sirve la carpeta `dist/frontend-ng20/browser` como recursos estaticos y ejecuta `node dist/frontend-ng20/server/server.mjs` para habilitar SSR.
-- Configura la variable de entorno `PORT` antes de iniciar el servidor si necesitas un puerto distinto (por defecto 4000).
+---
+
+## Módulos del sistema
+
+### Portal Administrador (`/admin`)
+
+| Ruta | Descripción |
+|------|-------------|
+| `/admin/dashboard` | Widgets de KPIs, gráficos y acciones rápidas |
+| `/admin/users` | Listado, alta, edición y baja de usuarios del sistema |
+| `/admin/profile` | Perfil del administrador |
+
+### Portal Operador (`/mobile`, APK Android)
+
+| Ruta | Descripción |
+|------|-------------|
+| `/mobile/services` | Lista de servicios asignados, filtrable por fecha |
+| `/mobile/services/:id` | Detalle del servicio: GPS, navegación, inicio y finalización |
+| `/mobile/services/:id/finished` | Pantalla de confirmación al finalizar el servicio |
+| `/mobile/profile-mobile` | Perfil del operador |
+
+---
+
+## Funcionalidad GPS — feature central del operador
+
+La pantalla `/mobile/services/:id` es el núcleo de la app Android:
+
+- **Geolocalización:** obtiene la posición actual del operador vía `@capacitor/geolocation` (solicita permisos en primer uso)
+- **Distancia:** calcula la distancia al destino del servicio usando la fórmula de Haversine
+- **Navegación externa:** abre Google Maps o Waze con las coordenadas del servicio
+- **Inicio de servicio:** llama a `PATCH /api/Operaciones/iniciar` y actualiza el estado local
+- **Finalización:** llama a `PATCH /api/Operaciones/finalizar` y redirige a `/finished`
+
+Las pantallas de detalle y finalización ocultan la bottom nav (`data: { hideBottomNav: true }`).
+
+---
+
+## Autenticación y guards
+
+### Flujo
+1. Login POST a `/api/Auth/login` (usuario/pass) o Google OAuth (admin)
+2. Respuesta: `{ token, user }` — se guarda en `localStorage`
+3. El guard evalúa el rol del usuario en `auth.session` y activa `/admin` o `/mobile`
+4. El `authInterceptor` agrega `Authorization: Bearer <token>` a cada request HTTP
+
+### Interceptores HTTP
+
+| Interceptor | Comportamiento |
+|-------------|----------------|
+| `authInterceptor` | Adjunta el token JWT a todas las peticiones (excepto `/api/login/authenticate`) |
+| `loaderInterceptor` | Activa/desactiva el spinner global mientras hay requests en vuelo |
+| `errorInterceptor` | `401` → logout y redirige a login; `429`/`504` → alerta SweetAlert2 |
+
+---
+
+## Ejecutar el proyecto
+
+### Servidor de desarrollo (web)
+
+```bash
+npm install
+npm start       # http://localhost:4200
+```
+
+### Build de producción + SSR
+
+```bash
+npm run build   # genera dist/frontend-ng20/browser y dist/frontend-ng20/server
+npm run serve:ssr:frontend-ng20   # Express SSR en http://localhost:4000
+```
+
+### Build APK Android
+
+```bash
+# 1. Build del proyecto Angular
+npm run build
+
+# 2. Sincronizar assets con el proyecto nativo
+npx cap sync android
+
+# 3. Abrir Android Studio para generar el APK
+npx cap open android
+```
+
+En Android Studio: **Build → Generate Signed App Bundle / APK**.
+
+---
+
+## Testing
+
+```bash
+npm test        # Karma + Jasmine (modo watch)
+```
+
+El formato de código se controla con Prettier (configuración en `package.json`): `printWidth: 100`, `singleQuote: true`.
+
+---
+
+## Estructura de carpetas
+
+```
+src/
+├── app/
+│   ├── core/
+│   │   ├── guards/           # canMatch + canActivate por rol
+│   │   ├── interceptors/     # auth, loader, error
+│   │   ├── services/         # AuthService, ServicesService, UserService, LoaderService
+│   │   └── strategies/       # MobileReuseStrategy (recrear componentes en tabs)
+│   │
+│   ├── features/
+│   │   ├── dashboard/        # KPIs y gráficos (admin)
+│   │   ├── services/         # Lista de servicios del operador
+│   │   ├── service-detail/   # GPS, inicio y fin de servicio
+│   │   ├── service-finished/ # Confirmación de finalización
+│   │   ├── profile/          # Perfil admin
+│   │   ├── profile-mobile/   # Perfil operador
+│   │   └── users/            # CRUD usuarios (admin)
+│   │
+│   ├── shared/
+│   │   └── components/       # bottom-nav, header, sidebar, service-card, loader, modal, table
+│   │
+│   ├── layouts/
+│   │   ├── admin/            # Shell admin: sidebar + header
+│   │   ├── mobile-layout/    # Shell móvil: bottom nav con lógica de ocultamiento
+│   │   └── authentication/   # Login web (OAuth) y login móvil (usuario/pass)
+│   │
+│   └── models/               # auth, service, user (api + view), ui
+│
+├── environments/
+│   ├── environment.ts              # Producción / build por defecto
+│   └── environment.development.ts  # Desarrollo local
+│
+└── server.ts                 # Servidor Express para SSR
+```
